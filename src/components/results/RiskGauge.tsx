@@ -13,7 +13,12 @@ export function RiskGauge({ level }: { level: RiskLevel }) {
 
   return (
     <div className="w-full">
-      <svg viewBox="0 0 200 116" className="w-full" role="img" aria-label={`Risk gauge: ${LEVELS[index].label}`}>
+      <svg
+        viewBox="0 0 200 116"
+        className="w-full"
+        role="img"
+        aria-label={`Risk gauge: ${LEVELS[index].label}`}
+      >
         {LEVELS.map((l, i) => {
           const start = Math.PI - (i * Math.PI) / LEVELS.length;
           const end = Math.PI - ((i + 1) * Math.PI) / LEVELS.length;
@@ -34,8 +39,22 @@ export function RiskGauge({ level }: { level: RiskLevel }) {
             />
           );
         })}
-        <g style={{ transform: `rotate(${angle}deg)`, transformOrigin: "100px 100px", transition: "transform 900ms cubic-bezier(0.34,1.4,0.64,1)" }}>
-          <line x1="100" y1="100" x2="100" y2="38" stroke="var(--foreground)" strokeWidth="4" strokeLinecap="round" />
+        <g
+          style={{
+            transform: `rotate(${angle}deg)`,
+            transformOrigin: "100px 100px",
+            transition: "transform 900ms cubic-bezier(0.34,1.4,0.64,1)",
+          }}
+        >
+          <line
+            x1="100"
+            y1="100"
+            x2="100"
+            y2="38"
+            stroke="var(--foreground)"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
         </g>
         <circle cx="100" cy="100" r="7" fill="var(--foreground)" />
       </svg>

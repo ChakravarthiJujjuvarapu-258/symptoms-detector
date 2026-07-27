@@ -34,7 +34,10 @@ export function ChatAssistant() {
     setInput("");
     setThinking(true);
     window.setTimeout(() => {
-      setMessages((m) => [...m, { id: `${Date.now()}-a`, role: "assistant", text: askAssistant(question) }]);
+      setMessages((m) => [
+        ...m,
+        { id: `${Date.now()}-a`, role: "assistant", text: askAssistant(question) },
+      ]);
       setThinking(false);
     }, 650);
   };
@@ -48,7 +51,11 @@ export function ChatAssistant() {
         aria-label={open ? "Close health assistant" : "Open health assistant"}
         className="fixed bottom-5 right-5 z-50 size-14 rounded-full clinical-gradient text-primary-foreground shadow-lg animate-pulse-ring hover:opacity-95"
       >
-        {open ? <X className="size-6" aria-hidden="true" /> : <MessageCircleHeart className="size-6" aria-hidden="true" />}
+        {open ? (
+          <X className="size-6" aria-hidden="true" />
+        ) : (
+          <MessageCircleHeart className="size-6" aria-hidden="true" />
+        )}
       </Button>
 
       {open && (
@@ -112,7 +119,12 @@ export function ChatAssistant() {
               placeholder="Ask about a symptom…"
               className="rounded-xl"
             />
-            <Button type="submit" size="icon" aria-label="Send message" className="min-h-11 min-w-11 shrink-0 rounded-xl">
+            <Button
+              type="submit"
+              size="icon"
+              aria-label="Send message"
+              className="min-h-11 min-w-11 shrink-0 rounded-xl"
+            >
               <Send className="size-4" aria-hidden="true" />
             </Button>
           </form>

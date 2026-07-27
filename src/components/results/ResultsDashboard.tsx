@@ -60,8 +60,14 @@ export function ResultsDashboard({
   onRestart: () => void;
 }) {
   const timeline = [
-    { label: "Symptoms entered", detail: result.matchedSymptoms.slice(0, 4).join(", ") || "Free-text description recorded" },
-    { label: "Analysis completed", detail: `${result.conditions.length} possible conditions reviewed` },
+    {
+      label: "Symptoms entered",
+      detail: result.matchedSymptoms.slice(0, 4).join(", ") || "Free-text description recorded",
+    },
+    {
+      label: "Analysis completed",
+      detail: `${result.conditions.length} possible conditions reviewed`,
+    },
     {
       label: "Suggested next action",
       detail:
@@ -89,7 +95,11 @@ export function ResultsDashboard({
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
-          <Button variant="outline" className="rounded-xl" onClick={() => exportAssessmentPdf(result)}>
+          <Button
+            variant="outline"
+            className="rounded-xl"
+            onClick={() => exportAssessmentPdf(result)}
+          >
             <Download className="size-4" aria-hidden="true" />
             <span className="hidden sm:inline">Export PDF</span>
           </Button>
@@ -134,7 +144,11 @@ export function ResultsDashboard({
                 {c.confidence}% match
               </span>
             </div>
-            <Progress value={c.confidence} className="mt-2 h-1.5" aria-label={`${c.name} confidence`} />
+            <Progress
+              value={c.confidence}
+              className="mt-2 h-1.5"
+              aria-label={`${c.name} confidence`}
+            />
             <p className="mt-3 text-sm text-muted-foreground">{c.explanation}</p>
             <dl className="mt-3 grid gap-3 sm:grid-cols-2">
               <div>
@@ -143,7 +157,10 @@ export function ResultsDashboard({
                 </dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
                   {c.commonSymptoms.map((s) => (
-                    <span key={s} className="rounded-full bg-accent px-2.5 py-0.5 text-xs text-accent-foreground">
+                    <span
+                      key={s}
+                      className="rounded-full bg-accent px-2.5 py-0.5 text-xs text-accent-foreground"
+                    >
                       {s}
                     </span>
                   ))}
@@ -193,7 +210,10 @@ export function ResultsDashboard({
         <ol className="relative space-y-5 border-l border-border pl-6">
           {timeline.map((t) => (
             <li key={t.label}>
-              <span className="absolute -left-[7px] mt-1.5 size-3.5 rounded-full border-2 border-background bg-teal" aria-hidden="true" />
+              <span
+                className="absolute -left-[7px] mt-1.5 size-3.5 rounded-full border-2 border-background bg-teal"
+                aria-hidden="true"
+              />
               <p className="font-semibold">{t.label}</p>
               <p className="text-sm text-muted-foreground">{t.detail}</p>
             </li>
@@ -204,7 +224,14 @@ export function ResultsDashboard({
       <Disclaimer />
 
       <p className="text-center text-sm text-muted-foreground">
-        Saved to your <Link to="/history" className="font-semibold text-primary underline-offset-4 hover:underline">assessment history</Link>.
+        Saved to your{" "}
+        <Link
+          to="/history"
+          className="font-semibold text-primary underline-offset-4 hover:underline"
+        >
+          assessment history
+        </Link>
+        .
       </p>
     </div>
   );

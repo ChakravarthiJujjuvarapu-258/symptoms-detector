@@ -2,7 +2,10 @@ import { RISK_META } from "./engine";
 import type { AnalysisResult } from "./types";
 
 const escapeHtml = (s: string) =>
-  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+  s.replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
 
 /** Opens a print-ready document; the browser print dialog can save it as PDF. */
 export function exportAssessmentPdf(result: AnalysisResult): boolean {

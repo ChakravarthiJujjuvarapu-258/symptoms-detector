@@ -9,7 +9,11 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6">
-        <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="AI Symptoms Detector home">
+        <Link
+          to="/"
+          className="flex min-w-0 items-center gap-2.5"
+          aria-label="AI Symptoms Detector home"
+        >
           <span className="grid size-9 shrink-0 place-items-center rounded-xl clinical-gradient text-primary-foreground">
             <Activity className="size-5" aria-hidden="true" />
           </span>

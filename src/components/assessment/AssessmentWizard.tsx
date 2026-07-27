@@ -32,7 +32,12 @@ const YES_NO: { key: keyof Extras; label: string }[] = [
 export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResult) => void }) {
   const [step, setStep] = useState(0);
   const [analyzing, setAnalyzing] = useState(false);
-  const [profile, setProfile] = useState<Profile>({ age: "", gender: "", heightCm: "", weightKg: "" });
+  const [profile, setProfile] = useState<Profile>({
+    age: "",
+    gender: "",
+    heightCm: "",
+    weightKg: "",
+  });
   const [history, setHistory] = useState<string[]>([]);
   const [symptoms, setSymptoms] = useState("");
   const [extras, setExtras] = useState<Extras>({
@@ -230,7 +235,9 @@ export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResul
                   <Label htmlFor="duration">How long have you had these symptoms?</Label>
                   <Select
                     value={extras.duration}
-                    onValueChange={(v) => setExtras({ ...extras, duration: v as Extras["duration"] })}
+                    onValueChange={(v) =>
+                      setExtras({ ...extras, duration: v as Extras["duration"] })
+                    }
                   >
                     <SelectTrigger id="duration" className="w-full rounded-xl">
                       <SelectValue placeholder="Select duration" />
@@ -311,7 +318,10 @@ export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResul
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Button>
             ) : (
-              <Button className="rounded-xl clinical-gradient text-primary-foreground" onClick={runAnalysis}>
+              <Button
+                className="rounded-xl clinical-gradient text-primary-foreground"
+                onClick={runAnalysis}
+              >
                 <Sparkle className="size-4" aria-hidden="true" />
                 Analyze symptoms
               </Button>

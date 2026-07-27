@@ -32,7 +32,9 @@ function AssessmentPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
       {result ? (
-        <Suspense fallback={<p className="py-20 text-center text-muted-foreground">Loading results…</p>}>
+        <Suspense
+          fallback={<p className="py-20 text-center text-muted-foreground">Loading results…</p>}
+        >
           <ResultsDashboard result={result} onRestart={() => setResult(null)} />
         </Suspense>
       ) : (

@@ -91,7 +91,10 @@ function HistoryPage() {
         <ul className="mt-6 space-y-4">
           {filtered.map((r, i) => (
             <li key={r.id}>
-              <Card className="animate-fade-up rounded-3xl surface-panel" style={{ animationDelay: `${i * 50}ms` }}>
+              <Card
+                className="animate-fade-up rounded-3xl surface-panel"
+                style={{ animationDelay: `${i * 50}ms` }}
+              >
                 <CardContent className="space-y-3 py-5">
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                     <div className="min-w-0">

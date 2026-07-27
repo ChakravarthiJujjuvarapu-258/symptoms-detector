@@ -10,14 +10,7 @@ export function HealthScoreRing({ score }: { score: number }) {
       aria-label={`Health score ${score} out of 100`}
     >
       <svg viewBox="0 0 160 160" className="size-40 -rotate-90">
-        <circle
-          cx="80"
-          cy="80"
-          r={radius}
-          fill="none"
-          strokeWidth="12"
-          className="stroke-muted"
-        />
+        <circle cx="80" cy="80" r={radius} fill="none" strokeWidth="12" className="stroke-muted" />
         <circle
           cx="80"
           cy="80"

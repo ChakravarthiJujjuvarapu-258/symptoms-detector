@@ -1,12 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Activity,
-  Brain,
-  ClipboardList,
-  HeartPulse,
-  Lock,
-  ShieldCheck,
-} from "lucide-react";
+import { Activity, Brain, ClipboardList, HeartPulse, Lock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Disclaimer } from "@/components/Disclaimer";
 

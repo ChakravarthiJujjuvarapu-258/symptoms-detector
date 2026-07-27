@@ -43,7 +43,10 @@ export function SymptomCategoryChart({ data }: { data: CategoryScore[] }) {
       </div>
       <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
         {data.map((entry, i) => (
-          <li key={entry.category} className="flex items-center gap-2 text-xs text-muted-foreground">
+          <li
+            key={entry.category}
+            className="flex items-center gap-2 text-xs text-muted-foreground"
+          >
             <span
               className="size-2.5 rounded-full"
               style={{ backgroundColor: COLORS[i % COLORS.length] }}
