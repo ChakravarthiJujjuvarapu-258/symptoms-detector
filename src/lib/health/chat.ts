@@ -22,7 +22,7 @@ const ENTRIES: Entry[] = [
       "Fever is the body raising its temperature to fight infection, generally defined as 38°C (100.4°F) or above. Fluids, rest and light clothing help. Persistent fever beyond three days, fever in infants, or fever with confusion or breathlessness should be assessed by a clinician.",
   },
   {
-    keywords: ["flu", "influenza", "cough and fever"],
+    keywords: ["flu", "influenza", "cough and fever", "fever and cough"],
     answer:
       "Fever with cough, body aches and sudden fatigue is a pattern often seen with influenza, but COVID-19 and other viral infections look similar. Only a clinician and, where relevant, a test can tell them apart — this app can only describe possibilities.",
   },
