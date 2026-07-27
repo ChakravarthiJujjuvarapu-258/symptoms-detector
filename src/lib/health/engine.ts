@@ -212,7 +212,7 @@ export function analyzeSymptoms(input: AssessmentInput): AnalysisResult {
     const hits = c.triggers.filter((t) => matchedKeys.has(t)).length;
     const boosts = (c.boost ?? []).filter((t) => matchedKeys.has(t)).length;
     const base = hits / c.triggers.length;
-    const score = base * 70 + boosts * 8;
+    const score = base * 45 + hits * 9 + boosts * 7;
     return { def: c, score };
   })
     .filter((c) => c.score > 0)
