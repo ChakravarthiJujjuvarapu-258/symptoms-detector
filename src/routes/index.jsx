@@ -2,53 +2,47 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Activity, Brain, ClipboardList, HeartPulse, Lock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Disclaimer } from "@/components/Disclaimer";
-
-export const Route = createFileRoute("/")({
+const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AI Symptoms Detector — AI-Powered Symptom Checker" },
+      { title: "AI Symptoms Detector \u2014 AI-Powered Symptom Checker" },
       {
         name: "description",
-        content:
-          "Describe your symptoms in plain language and receive AI-powered health insights, risk levels and educational recommendations. Not a medical diagnosis.",
+        content: "Describe your symptoms in plain language and receive AI-powered health insights, risk levels and educational recommendations. Not a medical diagnosis."
       },
-      { property: "og:title", content: "AI Symptoms Detector — AI-Powered Symptom Checker" },
+      { property: "og:title", content: "AI Symptoms Detector \u2014 AI-Powered Symptom Checker" },
       {
         property: "og:description",
-        content:
-          "Describe your symptoms and receive AI-powered health insights, risk levels and recommendations.",
-      },
-    ],
+        content: "Describe your symptoms and receive AI-powered health insights, risk levels and recommendations."
+      }
+    ]
   }),
-  component: Landing,
+  component: Landing
 });
-
 const FEATURES = [
   {
     icon: Brain,
     title: "Natural language input",
-    text: "Describe how you feel in your own words — duration, severity and all.",
+    text: "Describe how you feel in your own words \u2014 duration, severity and all."
   },
   {
     icon: HeartPulse,
     title: "Risk triage",
-    text: "Low, moderate, high or emergency, with instant escalation for red-flag symptoms.",
+    text: "Low, moderate, high or emergency, with instant escalation for red-flag symptoms."
   },
   {
     icon: ClipboardList,
     title: "Actionable summary",
-    text: "Possible conditions, recommendations and tests to discuss with a clinician.",
+    text: "Possible conditions, recommendations and tests to discuss with a clinician."
   },
   {
     icon: Lock,
     title: "Private by design",
-    text: "Assessments are stored locally in your browser, never uploaded.",
-  },
+    text: "Assessments are stored locally in your browser, never uploaded."
+  }
 ];
-
 function Landing() {
-  return (
-    <div>
+  return <div>
       <section className="grid-backdrop">
         <div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
           <span className="animate-fade-in inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-xs font-semibold text-muted-foreground">
@@ -59,20 +53,20 @@ function Landing() {
             AI Symptoms Detector
           </h1>
           <p
-            className="animate-fade-up mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg"
-            style={{ animationDelay: "80ms" }}
-          >
+    className="animate-fade-up mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg"
+    style={{ animationDelay: "80ms" }}
+  >
             Describe your symptoms and receive AI-powered health insights.
           </p>
           <div
-            className="animate-fade-up mt-8 flex flex-wrap justify-center gap-3"
-            style={{ animationDelay: "160ms" }}
-          >
+    className="animate-fade-up mt-8 flex flex-wrap justify-center gap-3"
+    style={{ animationDelay: "160ms" }}
+  >
             <Button
-              asChild
-              size="lg"
-              className="min-h-12 rounded-2xl clinical-gradient px-8 text-base text-primary-foreground hover:opacity-95"
-            >
+    asChild
+    size="lg"
+    className="min-h-12 rounded-2xl clinical-gradient px-8 text-base text-primary-foreground hover:opacity-95"
+  >
               <Link to="/assessment">
                 <Activity className="size-5" aria-hidden="true" />
                 Start Assessment
@@ -87,25 +81,25 @@ function Landing() {
           What the assessment gives you
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((f, i) => (
-            <article
-              key={f.title}
-              className="animate-fade-up rounded-3xl surface-panel p-5 transition-transform duration-300 hover:-translate-y-1"
-              style={{ animationDelay: `${i * 70}ms` }}
-            >
+          {FEATURES.map((f, i) => <article
+    key={f.title}
+    className="animate-fade-up rounded-3xl surface-panel p-5 transition-transform duration-300 hover:-translate-y-1"
+    style={{ animationDelay: `${i * 70}ms` }}
+  >
               <span className="grid size-10 place-items-center rounded-2xl bg-accent text-accent-foreground">
                 <f.icon className="size-5" aria-hidden="true" />
               </span>
               <h3 className="mt-4 font-bold">{f.title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{f.text}</p>
-            </article>
-          ))}
+            </article>)}
         </div>
 
         <div className="mt-10">
           <Disclaimer />
         </div>
       </section>
-    </div>
-  );
+    </div>;
 }
+export {
+  Route
+};

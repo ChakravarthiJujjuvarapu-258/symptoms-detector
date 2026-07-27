@@ -10,7 +10,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -20,55 +20,44 @@ import { EmergencyBanner } from "@/components/results/EmergencyBanner";
 import { DURATION_OPTIONS, MEDICAL_HISTORY_OPTIONS, STEPS } from "./constants";
 import { analyzeSymptoms, detectEmergency } from "@/lib/health/engine";
 import { saveAssessment, setLastResult } from "@/lib/health/storage";
-import type { AnalysisResult, AssessmentInput, Extras, Gender, Profile } from "@/lib/health/types";
-
-const YES_NO: { key: keyof Extras; label: string }[] = [
+const YES_NO = [
   { key: "recentTravel", label: "Recent travel?" },
   { key: "sickContact", label: "Recent contact with a sick person?" },
   { key: "smoker", label: "Smoker?" },
-  { key: "alcohol", label: "Alcohol use?" },
+  { key: "alcohol", label: "Alcohol use?" }
 ];
-
-export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResult) => void }) {
+function AssessmentWizard({ onComplete }) {
   const [step, setStep] = useState(0);
   const [analyzing, setAnalyzing] = useState(false);
-  const [profile, setProfile] = useState<Profile>({
+  const [profile, setProfile] = useState({
     age: "",
     gender: "",
     heightCm: "",
-    weightKg: "",
+    weightKg: ""
   });
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState([]);
   const [symptoms, setSymptoms] = useState("");
-  const [extras, setExtras] = useState<Extras>({
+  const [extras, setExtras] = useState({
     duration: "",
     pain: 3,
     temperature: "",
     recentTravel: false,
     sickContact: false,
     smoker: false,
-    alcohol: false,
+    alcohol: false
   });
-
   const emergencyHit = detectEmergency(symptoms).length > 0;
-  const canContinue =
-    step === 0
-      ? profile.age.trim() !== "" && profile.gender !== ""
-      : step === 2
-        ? symptoms.trim().length >= 8
-        : true;
-
-  const toggleHistory = (option: string) => {
+  const canContinue = step === 0 ? profile.age.trim() !== "" && profile.gender !== "" : step === 2 ? symptoms.trim().length >= 8 : true;
+  const toggleHistory = (option) => {
     setHistory((prev) => {
       if (option === "None") return prev.includes("None") ? [] : ["None"];
       const without = prev.filter((p) => p !== "None");
       return without.includes(option) ? without.filter((p) => p !== option) : [...without, option];
     });
   };
-
   const runAnalysis = () => {
     setAnalyzing(true);
-    const input: AssessmentInput = { profile, history, symptoms, extras };
+    const input = { profile, history, symptoms, extras };
     window.setTimeout(() => {
       const result = analyzeSymptoms(input);
       saveAssessment(result);
@@ -77,10 +66,8 @@ export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResul
       onComplete(result);
     }, 2200);
   };
-
   if (analyzing) {
-    return (
-      <Card className="rounded-3xl surface-panel">
+    return <Card className="rounded-3xl surface-panel">
         <CardContent className="flex flex-col items-center gap-4 py-20 text-center">
           <span className="grid size-16 place-items-center rounded-full clinical-gradient text-primary-foreground animate-pulse-ring">
             <Loader2 className="size-7 animate-spin" aria-hidden="true" />
@@ -93,55 +80,49 @@ export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResul
             signals.
           </p>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
-  return (
-    <div className="space-y-5">
+  return <div className="space-y-5">
       <ol className="grid grid-cols-4 gap-2" aria-label="Assessment progress">
-        {STEPS.map((label, i) => (
-          <li key={label} className="min-w-0">
+        {STEPS.map((label, i) => <li key={label} className="min-w-0">
             <div
-              className={`h-1.5 rounded-full transition-colors ${i <= step ? "bg-primary" : "bg-muted"}`}
-              aria-hidden="true"
-            />
+    className={`h-1.5 rounded-full transition-colors ${i <= step ? "bg-primary" : "bg-muted"}`}
+    aria-hidden="true"
+  />
             <p
-              className={`mt-2 truncate text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}
-              aria-current={i === step ? "step" : undefined}
-            >
+    className={`mt-2 truncate text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}
+    aria-current={i === step ? "step" : void 0}
+  >
               {i + 1}. {label}
             </p>
-          </li>
-        ))}
+          </li>)}
       </ol>
 
       <Card className="animate-fade-up rounded-3xl surface-panel" key={step}>
         <CardContent className="space-y-5 py-6">
-          {step === 0 && (
-            <fieldset className="space-y-5">
+          {step === 0 && <fieldset className="space-y-5">
               <legend className="text-lg font-bold">Tell us about you</legend>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <Label htmlFor="age">Age</Label>
                   <Input
-                    id="age"
-                    type="number"
-                    min={0}
-                    max={120}
-                    inputMode="numeric"
-                    value={profile.age}
-                    onChange={(e) => setProfile({ ...profile, age: e.target.value })}
-                    placeholder="e.g. 34"
-                    className="rounded-xl"
-                  />
+    id="age"
+    type="number"
+    min={0}
+    max={120}
+    inputMode="numeric"
+    value={profile.age}
+    onChange={(e) => setProfile({ ...profile, age: e.target.value })}
+    placeholder="e.g. 34"
+    className="rounded-xl"
+  />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="gender">Gender</Label>
                   <Select
-                    value={profile.gender}
-                    onValueChange={(v) => setProfile({ ...profile, gender: v as Gender })}
-                  >
+    value={profile.gender}
+    onValueChange={(v) => setProfile({ ...profile, gender: v })}
+  >
                     <SelectTrigger id="gender" className="w-full rounded-xl">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
@@ -155,58 +136,52 @@ export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResul
                 <div className="space-y-1.5">
                   <Label htmlFor="height">Height (cm)</Label>
                   <Input
-                    id="height"
-                    type="number"
-                    inputMode="numeric"
-                    value={profile.heightCm}
-                    onChange={(e) => setProfile({ ...profile, heightCm: e.target.value })}
-                    placeholder="e.g. 172"
-                    className="rounded-xl"
-                  />
+    id="height"
+    type="number"
+    inputMode="numeric"
+    value={profile.heightCm}
+    onChange={(e) => setProfile({ ...profile, heightCm: e.target.value })}
+    placeholder="e.g. 172"
+    className="rounded-xl"
+  />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="weight">Weight (kg)</Label>
                   <Input
-                    id="weight"
-                    type="number"
-                    inputMode="numeric"
-                    value={profile.weightKg}
-                    onChange={(e) => setProfile({ ...profile, weightKg: e.target.value })}
-                    placeholder="e.g. 68"
-                    className="rounded-xl"
-                  />
+    id="weight"
+    type="number"
+    inputMode="numeric"
+    value={profile.weightKg}
+    onChange={(e) => setProfile({ ...profile, weightKg: e.target.value })}
+    placeholder="e.g. 68"
+    className="rounded-xl"
+  />
                 </div>
               </div>
-            </fieldset>
-          )}
+            </fieldset>}
 
-          {step === 1 && (
-            <fieldset className="space-y-4">
+          {step === 1 && <fieldset className="space-y-4">
               <legend className="text-lg font-bold">Medical history</legend>
               <p className="text-sm text-muted-foreground">
                 Select any conditions that apply to you.
               </p>
               <div className="grid gap-2 sm:grid-cols-2">
-                {MEDICAL_HISTORY_OPTIONS.map((option) => (
-                  <label
-                    key={option}
-                    htmlFor={`hist-${option}`}
-                    className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface/50 px-3 py-2.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
-                  >
+                {MEDICAL_HISTORY_OPTIONS.map((option) => <label
+    key={option}
+    htmlFor={`hist-${option}`}
+    className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface/50 px-3 py-2.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+  >
                     <Checkbox
-                      id={`hist-${option}`}
-                      checked={history.includes(option)}
-                      onCheckedChange={() => toggleHistory(option)}
-                    />
+    id={`hist-${option}`}
+    checked={history.includes(option)}
+    onCheckedChange={() => toggleHistory(option)}
+  />
                     {option}
-                  </label>
-                ))}
+                  </label>)}
               </div>
-            </fieldset>
-          )}
+            </fieldset>}
 
-          {step === 2 && (
-            <div className="space-y-4">
+          {step === 2 && <div className="space-y-4">
               <div>
                 <Label htmlFor="symptoms" className="text-lg font-bold">
                   Describe your symptoms
@@ -216,126 +191,109 @@ export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResul
                 </p>
               </div>
               <Textarea
-                id="symptoms"
-                value={symptoms}
-                onChange={(e) => setSymptoms(e.target.value)}
-                rows={8}
-                className="rounded-2xl text-base"
-                placeholder="Example: I have had a fever for 3 days with sore throat, headache, cough, and fatigue."
-              />
+    id="symptoms"
+    value={symptoms}
+    onChange={(e) => setSymptoms(e.target.value)}
+    rows={8}
+    className="rounded-2xl text-base"
+    placeholder="Example: I have had a fever for 3 days with sore throat, headache, cough, and fatigue."
+  />
               {emergencyHit && <EmergencyBanner />}
-            </div>
-          )}
+            </div>}
 
-          {step === 3 && (
-            <div className="space-y-6">
+          {step === 3 && <div className="space-y-6">
               <h2 className="text-lg font-bold">A few more details</h2>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <Label htmlFor="duration">How long have you had these symptoms?</Label>
                   <Select
-                    value={extras.duration}
-                    onValueChange={(v) =>
-                      setExtras({ ...extras, duration: v as Extras["duration"] })
-                    }
-                  >
+    value={extras.duration}
+    onValueChange={(v) => setExtras({ ...extras, duration: v })}
+  >
                     <SelectTrigger id="duration" className="w-full rounded-xl">
                       <SelectValue placeholder="Select duration" />
                     </SelectTrigger>
                     <SelectContent>
-                      {DURATION_OPTIONS.map((d) => (
-                        <SelectItem key={d.value} value={d.value}>
+                      {DURATION_OPTIONS.map((d) => <SelectItem key={d.value} value={d.value}>
                           {d.label}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="temperature">Temperature (optional)</Label>
                   <Input
-                    id="temperature"
-                    value={extras.temperature}
-                    onChange={(e) => setExtras({ ...extras, temperature: e.target.value })}
-                    placeholder="e.g. 38.5"
-                    inputMode="decimal"
-                    className="rounded-xl"
-                  />
+    id="temperature"
+    value={extras.temperature}
+    onChange={(e) => setExtras({ ...extras, temperature: e.target.value })}
+    placeholder="e.g. 38.5"
+    inputMode="decimal"
+    className="rounded-xl"
+  />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="pain">Pain scale: {extras.pain} / 10</Label>
                 <Slider
-                  id="pain"
-                  min={1}
-                  max={10}
-                  step={1}
-                  value={[extras.pain]}
-                  onValueChange={([v]) => setExtras({ ...extras, pain: v })}
-                  aria-label="Pain level from 1 to 10"
-                />
+    id="pain"
+    min={1}
+    max={10}
+    step={1}
+    value={[extras.pain]}
+    onValueChange={([v]) => setExtras({ ...extras, pain: v })}
+    aria-label="Pain level from 1 to 10"
+  />
               </div>
 
               <div className="grid gap-2 sm:grid-cols-2">
-                {YES_NO.map(({ key, label }) => (
-                  <div
-                    key={key}
-                    className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-border bg-surface/50 px-3 py-2.5"
-                  >
+                {YES_NO.map(({ key, label }) => <div
+    key={key}
+    className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-border bg-surface/50 px-3 py-2.5"
+  >
                     <Label htmlFor={`sw-${key}`} className="text-sm font-normal">
                       {label}
                     </Label>
                     <Switch
-                      id={`sw-${key}`}
-                      checked={Boolean(extras[key])}
-                      onCheckedChange={(v) => setExtras({ ...extras, [key]: v })}
-                    />
-                  </div>
-                ))}
+    id={`sw-${key}`}
+    checked={Boolean(extras[key])}
+    onCheckedChange={(v) => setExtras({ ...extras, [key]: v })}
+  />
+                  </div>)}
               </div>
-            </div>
-          )}
+            </div>}
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
             <Button
-              variant="ghost"
-              className="rounded-xl"
-              onClick={() => setStep((s) => Math.max(0, s - 1))}
-              disabled={step === 0}
-            >
+    variant="ghost"
+    className="rounded-xl"
+    onClick={() => setStep((s) => Math.max(0, s - 1))}
+    disabled={step === 0}
+  >
               <ArrowLeft className="size-4" aria-hidden="true" />
               Back
             </Button>
 
-            {step < 3 ? (
-              <Button
-                className="rounded-xl"
-                onClick={() => setStep((s) => s + 1)}
-                disabled={!canContinue}
-              >
+            {step < 3 ? <Button
+    className="rounded-xl"
+    onClick={() => setStep((s) => s + 1)}
+    disabled={!canContinue}
+  >
                 Continue
                 <ArrowRight className="size-4" aria-hidden="true" />
-              </Button>
-            ) : (
-              <Button
-                className="rounded-xl clinical-gradient text-primary-foreground"
-                onClick={runAnalysis}
-              >
+              </Button> : <Button
+    className="rounded-xl clinical-gradient text-primary-foreground"
+    onClick={runAnalysis}
+  >
                 <Sparkle className="size-4" aria-hidden="true" />
                 Analyze symptoms
-              </Button>
-            )}
+              </Button>}
           </div>
 
-          {step === 0 && !canContinue && (
-            <p className="text-xs text-muted-foreground">Age and gender are needed to continue.</p>
-          )}
-          {step === 2 && !canContinue && (
-            <p className="text-xs text-muted-foreground">
+          {step === 0 && !canContinue && <p className="text-xs text-muted-foreground">Age and gender are needed to continue.</p>}
+          {step === 2 && !canContinue && <p className="text-xs text-muted-foreground">
               Add a little more detail about your symptoms to continue.
-            </p>
-          )}
+            </p>}
         </CardContent>
       </Card>
 
@@ -345,6 +303,8 @@ export function AssessmentWizard({ onComplete }: { onComplete: (r: AnalysisResul
       </div>
 
       <Disclaimer compact />
-    </div>
-  );
+    </div>;
 }
+export {
+  AssessmentWizard
+};
