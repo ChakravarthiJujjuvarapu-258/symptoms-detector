@@ -37,7 +37,7 @@ ${result.conditions
 <h2>Recommendations</h2><ul>${result.recommendations.map((r) => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
 <h2>Suggested tests to discuss with a clinician</h2><ul>${result.tests.map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>
 <p class="disclaimer">This application provides informational and educational guidance only. It is not a medical diagnosis and should not replace consultation with a qualified healthcare professional. If you have severe or worsening symptoms, seek medical care immediately.</p>
-<script>window.onload=()=>window.print()<\/script>
+<script>window.onload=()=>window.print()${"<"}/script>
 </body></html>`;
 
   win.document.write(html);
