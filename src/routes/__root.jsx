@@ -1,23 +1,20 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
   createRootRouteWithContext,
   useRouter,
   HeadContent,
-  Scripts,
+  Scripts
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
-
+import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { Disclaimer } from "@/components/Disclaimer";
-
 function NotFoundComponent() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+  return <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
@@ -26,26 +23,22 @@ function NotFoundComponent() {
         </p>
         <div className="mt-6">
           <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
+    to="/"
+    className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+  >
             Go home
           </Link>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
-
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
-
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+  return <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           This page didn't load
@@ -55,27 +48,25 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
+    onClick={() => {
+      router.invalidate();
+      reset();
+    }}
+    className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+  >
             Try again
           </button>
           <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
+    href="/"
+    className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+  >
             Go home
           </a>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
-
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+const Route = createRootRouteWithContext()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -83,41 +74,37 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "AI Symptoms Detector" },
       {
         name: "description",
-        content:
-          "Describe your symptoms and receive AI-powered health insights, risk levels and educational recommendations.",
+        content: "Describe your symptoms and receive AI-powered health insights, risk levels and educational recommendations."
       },
       { property: "og:title", content: "AI Symptoms Detector" },
       {
         property: "og:description",
-        content: "AI-powered symptom insights, risk levels and educational recommendations.",
+        content: "AI-powered symptom insights, risk levels and educational recommendations."
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:card", content: "summary_large_image" }
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: appCss
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-    ],
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" }
+    ]
   }),
-
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
+  errorComponent: ErrorComponent
 });
-
-function RootShell({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
+function RootShell({ children }) {
+  return <html lang="en">
       <head>
         <HeadContent />
       </head>
@@ -125,24 +112,22 @@ function RootShell({ children }: { children: ReactNode }) {
         {children}
         <Scripts />
       </body>
-    </html>
-  );
+    </html>;
 }
-
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-
-  return (
-    <QueryClientProvider client={queryClient}>
+  return <QueryClientProvider client={queryClient}>
       <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
-      >
+    href="#main-content"
+    className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+  >
         Skip to content
       </a>
       <SiteHeader />
       <main id="main-content" className="min-h-[70dvh]">
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        {
+    /* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */
+  }
         <Outlet />
       </main>
       <footer className="border-t border-border py-8">
@@ -151,6 +136,8 @@ function RootComponent() {
         </div>
       </footer>
       <ChatAssistant />
-    </QueryClientProvider>
-  );
+    </QueryClientProvider>;
 }
+export {
+  Route
+};

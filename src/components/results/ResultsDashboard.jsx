@@ -8,7 +8,7 @@ import {
   FlaskConical,
   HeartPulse,
   RotateCcw,
-  Stethoscope,
+  Stethoscope
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,26 +21,17 @@ import { RiskGauge } from "./RiskGauge";
 import { SymptomCategoryChart } from "./SymptomCategoryChart";
 import { RISK_META } from "@/lib/health/engine";
 import { exportAssessmentPdf } from "@/lib/health/export";
-import type { AnalysisResult } from "@/lib/health/types";
-
 function SectionCard({
   title,
   icon: Icon,
   children,
   className = "",
-  delay = 0,
-}: {
-  title: string;
-  icon: React.ElementType;
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
+  delay = 0
 }) {
-  return (
-    <Card
-      className="animate-fade-up rounded-3xl surface-panel"
-      style={{ animationDelay: `${delay}ms` }}
-    >
+  return <Card
+    className="animate-fade-up rounded-3xl surface-panel"
+    style={{ animationDelay: `${delay}ms` }}
+  >
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Icon className="size-4 text-teal" aria-hidden="true" />
@@ -48,41 +39,27 @@ function SectionCard({
         </CardTitle>
       </CardHeader>
       <CardContent className={className}>{children}</CardContent>
-    </Card>
-  );
+    </Card>;
 }
-
-export function ResultsDashboard({
+function ResultsDashboard({
   result,
-  onRestart,
-}: {
-  result: AnalysisResult;
-  onRestart: () => void;
+  onRestart
 }) {
   const timeline = [
     {
       label: "Symptoms entered",
-      detail: result.matchedSymptoms.slice(0, 4).join(", ") || "Free-text description recorded",
+      detail: result.matchedSymptoms.slice(0, 4).join(", ") || "Free-text description recorded"
     },
     {
       label: "Analysis completed",
-      detail: `${result.conditions.length} possible conditions reviewed`,
+      detail: `${result.conditions.length} possible conditions reviewed`
     },
     {
       label: "Suggested next action",
-      detail:
-        result.risk === "emergency"
-          ? "Seek emergency care immediately"
-          : result.risk === "high"
-            ? "Attend urgent care today"
-            : result.risk === "moderate"
-              ? "Book a doctor appointment within 24–48 hours"
-              : "Self-care and monitoring, review if symptoms persist",
-    },
+      detail: result.risk === "emergency" ? "Seek emergency care immediately" : result.risk === "high" ? "Attend urgent care today" : result.risk === "moderate" ? "Book a doctor appointment within 24\u201348 hours" : "Self-care and monitoring, review if symptoms persist"
+    }
   ];
-
-  return (
-    <div className="space-y-5">
+  return <div className="space-y-5">
       {result.emergency && <EmergencyBanner />}
 
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
@@ -96,10 +73,10 @@ export function ResultsDashboard({
         </div>
         <div className="flex shrink-0 gap-2">
           <Button
-            variant="outline"
-            className="rounded-xl"
-            onClick={() => exportAssessmentPdf(result)}
-          >
+    variant="outline"
+    className="rounded-xl"
+    onClick={() => exportAssessmentPdf(result)}
+  >
             <Download className="size-4" aria-hidden="true" />
             <span className="hidden sm:inline">Export PDF</span>
           </Button>
@@ -136,8 +113,7 @@ export function ResultsDashboard({
           These are possibilities that match the pattern you described, with inherent uncertainty. A
           clinician is needed to confirm or exclude any of them.
         </p>
-        {result.conditions.map((c) => (
-          <div key={c.name} className="rounded-2xl border border-border bg-surface/60 p-4">
+        {result.conditions.map((c) => <div key={c.name} className="rounded-2xl border border-border bg-surface/60 p-4">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
               <h3 className="min-w-0 font-semibold">{c.name}</h3>
               <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
@@ -145,10 +121,10 @@ export function ResultsDashboard({
               </span>
             </div>
             <Progress
-              value={c.confidence}
-              className="mt-2 h-1.5"
-              aria-label={`${c.name} confidence`}
-            />
+    value={c.confidence}
+    className="mt-2 h-1.5"
+    aria-label={`${c.name} confidence`}
+  />
             <p className="mt-3 text-sm text-muted-foreground">{c.explanation}</p>
             <dl className="mt-3 grid gap-3 sm:grid-cols-2">
               <div>
@@ -156,14 +132,12 @@ export function ResultsDashboard({
                   Common symptoms
                 </dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
-                  {c.commonSymptoms.map((s) => (
-                    <span
-                      key={s}
-                      className="rounded-full bg-accent px-2.5 py-0.5 text-xs text-accent-foreground"
-                    >
+                  {c.commonSymptoms.map((s) => <span
+    key={s}
+    className="rounded-full bg-accent px-2.5 py-0.5 text-xs text-accent-foreground"
+  >
                       {s}
-                    </span>
-                  ))}
+                    </span>)}
                 </dd>
               </div>
               <div>
@@ -173,32 +147,27 @@ export function ResultsDashboard({
                 <dd className="mt-1 text-sm text-muted-foreground">{c.treatment}</dd>
               </div>
             </dl>
-          </div>
-        ))}
+          </div>)}
       </SectionCard>
 
       <div className="grid gap-5 lg:grid-cols-2">
         <SectionCard title="Recommendations" icon={CheckCircle2} delay={240}>
           <ul className="space-y-2.5">
-            {result.recommendations.map((r) => (
-              <li key={r} className="flex gap-2.5 text-sm">
+            {result.recommendations.map((r) => <li key={r} className="flex gap-2.5 text-sm">
                 <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-teal" aria-hidden="true" />
                 <span>{r}</span>
-              </li>
-            ))}
+              </li>)}
           </ul>
         </SectionCard>
 
         <SectionCard title="Suggested tests to discuss" icon={FlaskConical} delay={280}>
           <ul className="flex flex-wrap gap-2">
-            {result.tests.map((t) => (
-              <li
-                key={t}
-                className="rounded-xl border border-border bg-surface/60 px-3 py-1.5 text-sm font-medium"
-              >
+            {result.tests.map((t) => <li
+    key={t}
+    className="rounded-xl border border-border bg-surface/60 px-3 py-1.5 text-sm font-medium"
+  >
                 {t}
-              </li>
-            ))}
+              </li>)}
           </ul>
           <p className="mt-3 text-xs text-muted-foreground">
             Only a clinician can decide which tests are appropriate for you.
@@ -208,16 +177,14 @@ export function ResultsDashboard({
 
       <SectionCard title="Timeline" icon={CalendarClock} delay={320}>
         <ol className="relative space-y-5 border-l border-border pl-6">
-          {timeline.map((t) => (
-            <li key={t.label}>
+          {timeline.map((t) => <li key={t.label}>
               <span
-                className="absolute -left-[7px] mt-1.5 size-3.5 rounded-full border-2 border-background bg-teal"
-                aria-hidden="true"
-              />
+    className="absolute -left-[7px] mt-1.5 size-3.5 rounded-full border-2 border-background bg-teal"
+    aria-hidden="true"
+  />
               <p className="font-semibold">{t.label}</p>
               <p className="text-sm text-muted-foreground">{t.detail}</p>
-            </li>
-          ))}
+            </li>)}
         </ol>
       </SectionCard>
 
@@ -226,13 +193,15 @@ export function ResultsDashboard({
       <p className="text-center text-sm text-muted-foreground">
         Saved to your{" "}
         <Link
-          to="/history"
-          className="font-semibold text-primary underline-offset-4 hover:underline"
-        >
+    to="/history"
+    className="font-semibold text-primary underline-offset-4 hover:underline"
+  >
           assessment history
         </Link>
         .
       </p>
-    </div>
-  );
+    </div>;
 }
+export {
+  ResultsDashboard
+};
