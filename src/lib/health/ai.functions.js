@@ -63,14 +63,25 @@ export const aiAnalyzeSymptoms = createServerFn({ method: "POST" })
     });
 
     const parsed = parseJson(text);
-    return {
-      conditions: (parsed.conditions ?? []).slice(0, 4).map((c) => ({
+    const { enrichConditions, collectSources, lookupSymptoms } = await import(
+      "@/lib/health/medline.server"
+    );
+    const baseConditions = (parsed.conditions ?? []).slice(0, 4).map((c) => ({
         name: String(c.name ?? "Possible condition"),
         confidence: Math.max(5, Math.min(80, Math.round(Number(c.confidence) || 20))),
         explanation: String(c.explanation ?? ""),
         commonSymptoms: (c.commonSymptoms ?? []).slice(0, 6).map(String),
         treatment: String(c.treatment ?? ""),
-      })),
+    }));
+
+    const [conditions, generalRefs] = await Promise.all([
+      enrichConditions(baseConditions),
+      lookupSymptoms(data.symptoms),
+    ]);
+
+    return {
+      conditions,
+      sources: collectSources(conditions, generalRefs),
       recommendations: (parsed.recommendations ?? []).slice(0, 6).map(String),
       tests: (parsed.tests ?? []).slice(0, 6).map(String),
       summary: typeof parsed.summary === "string" ? parsed.summary : "",
