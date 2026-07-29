@@ -3,6 +3,8 @@ import { MessageCircleHeart, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { askAssistant, CHAT_SUGGESTIONS } from "@/lib/health/chat";
+import { aiHealthChat } from "@/lib/health/ai.functions";
+
 const GREETING = {
   id: "greet",
   role: "assistant",
