@@ -19,20 +19,33 @@ function ChatAssistant() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
   }, [messages, thinking, open]);
-  const send = (text) => {
+  const send = async (text) => {
     const question = text.trim();
     if (!question || thinking) return;
-    setMessages((m) => [...m, { id: `${Date.now()}-u`, role: "user", text: question }]);
+    const history = [...messages, { id: `${Date.now()}-u`, role: "user", text: question }];
+    setMessages(history);
     setInput("");
     setThinking(true);
-    window.setTimeout(() => {
-      setMessages((m) => [
-        ...m,
-        { id: `${Date.now()}-a`, role: "assistant", text: askAssistant(question) }
-      ]);
-      setThinking(false);
-    }, 650);
+    let reply = "";
+    try {
+      const res = await aiHealthChat({
+        data: {
+          messages: history
+            .filter((m) => m.id !== "greet")
+            .map((m) => ({ role: m.role, content: m.text }))
+        }
+      });
+      reply = res?.reply ?? "";
+    } catch (error) {
+      console.error("AI chat failed, using offline answers", error);
+    }
+    setMessages((m) => [
+      ...m,
+      { id: `${Date.now()}-a`, role: "assistant", text: reply || askAssistant(question) }
+    ]);
+    setThinking(false);
   };
+
   return <>
       <Button
     onClick={() => setOpen((o) => !o)}
