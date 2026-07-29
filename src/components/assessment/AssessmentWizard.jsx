@@ -19,7 +19,10 @@ import { Disclaimer } from "@/components/Disclaimer";
 import { EmergencyBanner } from "@/components/results/EmergencyBanner";
 import { DURATION_OPTIONS, MEDICAL_HISTORY_OPTIONS, STEPS } from "./constants";
 import { analyzeSymptoms, detectEmergency } from "@/lib/health/engine";
+import { aiAnalyzeSymptoms as analyzeWithAi } from "@/lib/health/ai.functions";
+import { toast } from "sonner";
 import { saveAssessment, setLastResult } from "@/lib/health/storage";
+
 const YES_NO = [
   { key: "recentTravel", label: "Recent travel?" },
   { key: "sickContact", label: "Recent contact with a sick person?" },
@@ -55,17 +58,36 @@ function AssessmentWizard({ onComplete }) {
       return without.includes(option) ? without.filter((p) => p !== option) : [...without, option];
     });
   };
-  const runAnalysis = () => {
+  const runAnalysis = async () => {
     setAnalyzing(true);
     const input = { profile, history, symptoms, extras };
-    window.setTimeout(() => {
-      const result = analyzeSymptoms(input);
-      saveAssessment(result);
-      setLastResult(result);
-      setAnalyzing(false);
-      onComplete(result);
-    }, 2200);
+    let result = analyzeSymptoms(input);
+    try {
+      const ai = await analyzeWithAi({
+        data: { symptoms, profile, history, extras, risk: result.risk }
+      });
+      if (ai?.conditions?.length) {
+        result = {
+          ...result,
+          conditions: ai.conditions,
+          recommendations: ai.recommendations?.length ? ai.recommendations : result.recommendations,
+          tests: ai.tests?.length ? ai.tests : result.tests,
+          summary: ai.summary || undefined,
+          aiPowered: true
+        };
+      }
+    } catch (error) {
+      console.error("AI analysis failed, using local engine", error);
+      toast.message("Using offline analysis", {
+        description: "The AI service was unavailable, so a rule-based assessment was used."
+      });
+    }
+    saveAssessment(result);
+    setLastResult(result);
+    setAnalyzing(false);
+    onComplete(result);
   };
+
   if (analyzing) {
     return <Card className="rounded-3xl surface-panel">
         <CardContent className="flex flex-col items-center gap-4 py-20 text-center">

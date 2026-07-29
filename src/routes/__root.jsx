@@ -13,6 +13,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { Disclaimer } from "@/components/Disclaimer";
+import { Toaster } from "@/components/ui/sonner";
+
 function NotFoundComponent() {
   return <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -136,7 +138,9 @@ function RootComponent() {
         </div>
       </footer>
       <ChatAssistant />
+      <Toaster position="top-center" />
     </QueryClientProvider>;
+
 }
 export {
   Route
