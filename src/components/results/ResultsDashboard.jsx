@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import {
   Activity,
+  BookOpen,
+
   CalendarClock,
   CheckCircle2,
   ClipboardList,
