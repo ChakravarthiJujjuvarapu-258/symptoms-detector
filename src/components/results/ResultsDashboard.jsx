@@ -147,8 +147,49 @@ function ResultsDashboard({
                 <dd className="mt-1 text-sm text-muted-foreground">{c.treatment}</dd>
               </div>
             </dl>
+            {c.citations?.length ? <div className="mt-3 border-t border-border pt-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Verified against medical references
+                </p>
+                <ul className="mt-1.5 space-y-1">
+                  {c.citations.map((ref) => <li key={ref.url} className="text-sm">
+                      <a
+    href={ref.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="font-medium text-primary underline underline-offset-4"
+  >
+                        {ref.title}
+                      </a>
+                      <span className="text-muted-foreground"> — {ref.source}</span>
+                    </li>)}
+                </ul>
+              </div> : null}
           </div>)}
       </SectionCard>
+
+      {result.sources?.length ? <SectionCard title="Sources & citations" icon={BookOpen} delay={210} className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Insights above were cross-checked against MedlinePlus, the consumer health library of the
+            U.S. National Library of Medicine. Follow the links for the full, clinician-reviewed
+            articles.
+          </p>
+          <ul className="space-y-3">
+            {result.sources.map((ref) => <li key={ref.url} className="rounded-xl border border-border bg-surface/60 p-3">
+                <a
+    href={ref.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="font-semibold text-primary underline underline-offset-4"
+  >
+                  {ref.title}
+                </a>
+                <p className="mt-1 text-sm text-muted-foreground">{ref.snippet}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{ref.source}</p>
+              </li>)}
+          </ul>
+        </SectionCard> : null}
+
 
       <div className="grid gap-5 lg:grid-cols-2">
         <SectionCard title="Recommendations" icon={CheckCircle2} delay={240}>
