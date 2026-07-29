@@ -73,6 +73,8 @@ function AssessmentWizard({ onComplete }) {
           recommendations: ai.recommendations?.length ? ai.recommendations : result.recommendations,
           tests: ai.tests?.length ? ai.tests : result.tests,
           summary: ai.summary || undefined,
+          sources: ai.sources?.length ? ai.sources : undefined,
+
           aiPowered: true
         };
       }
