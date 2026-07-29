@@ -136,7 +136,9 @@ function RootComponent() {
         </div>
       </footer>
       <ChatAssistant />
+      <Toaster position="top-center" />
     </QueryClientProvider>;
+
 }
 export {
   Route
