@@ -19,7 +19,10 @@ import { Disclaimer } from "@/components/Disclaimer";
 import { EmergencyBanner } from "@/components/results/EmergencyBanner";
 import { DURATION_OPTIONS, MEDICAL_HISTORY_OPTIONS, STEPS } from "./constants";
 import { analyzeSymptoms, detectEmergency } from "@/lib/health/engine";
+import { aiAnalyzeSymptoms as analyzeWithAi } from "@/lib/health/ai.functions";
+import { toast } from "sonner";
 import { saveAssessment, setLastResult } from "@/lib/health/storage";
+
 const YES_NO = [
   { key: "recentTravel", label: "Recent travel?" },
   { key: "sickContact", label: "Recent contact with a sick person?" },
