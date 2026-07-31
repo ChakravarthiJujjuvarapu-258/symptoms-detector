@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircleHeart, Send, X } from "lucide-react";
+import { BookOpen, MessageCircleHeart, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { askAssistant, CHAT_SUGGESTIONS } from "@/lib/health/chat";
@@ -27,6 +27,7 @@ function ChatAssistant() {
     setInput("");
     setThinking(true);
     let reply = "";
+    let sources = [];
     try {
       const res = await aiHealthChat({
         data: {
@@ -36,12 +37,18 @@ function ChatAssistant() {
         }
       });
       reply = res?.reply ?? "";
+      sources = Array.isArray(res?.sources) ? res.sources : [];
     } catch (error) {
       console.error("AI chat failed, using offline answers", error);
     }
     setMessages((m) => [
       ...m,
-      { id: `${Date.now()}-a`, role: "assistant", text: reply || askAssistant(question) }
+      {
+        id: `${Date.now()}-a`,
+        role: "assistant",
+        text: reply || askAssistant(question),
+        sources
+      }
     ]);
     setThinking(false);
   };
@@ -74,6 +81,25 @@ function ChatAssistant() {
     className={m.role === "user" ? "ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-3.5 py-2 text-sm text-primary-foreground" : "max-w-[92%] text-sm leading-relaxed text-foreground"}
   >
                 {m.text}
+                {m.role === "assistant" && m.sources?.length ? <div className="mt-2 rounded-xl border border-border bg-surface/60 p-2.5">
+                    <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      <BookOpen className="size-3" aria-hidden="true" />
+                      References
+                    </p>
+                    <ul className="mt-1.5 space-y-1">
+                      {m.sources.map((ref) => <li key={ref.url} className="text-xs leading-snug">
+                          <a
+    href={ref.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="font-medium text-primary underline underline-offset-4"
+  >
+                            {ref.title}
+                          </a>
+                          <span className="text-muted-foreground"> — {ref.source}</span>
+                        </li>)}
+                    </ul>
+                  </div> : null}
               </div>)}
             {thinking && <p className="animate-fade-in text-sm text-muted-foreground">Thinking…</p>}
             <div ref={endRef} />

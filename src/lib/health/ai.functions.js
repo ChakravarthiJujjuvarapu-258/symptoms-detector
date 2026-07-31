@@ -107,11 +107,18 @@ export const aiHealthChat = createServerFn({ method: "POST" })
     };
   })
   .handler(async ({ data }) => {
-    const { text } = await generateText({
-      model: getModel(),
-      system: CHAT_SYSTEM,
-      messages: data.messages,
-      providerOptions: { lovable: { reasoningEffort: "none" } },
-    });
-    return { reply: text.trim() };
+    const lastUser = [...data.messages].reverse().find((m) => m.role === "user");
+    const { lookupSymptoms } = await import("@/lib/health/medline.server");
+
+    const [{ text }, sources] = await Promise.all([
+      generateText({
+        model: getModel(),
+        system: CHAT_SYSTEM,
+        messages: data.messages,
+        providerOptions: { lovable: { reasoningEffort: "none" } },
+      }),
+      lookupSymptoms(lastUser?.content ?? "", 3),
+    ]);
+
+    return { reply: text.trim(), sources };
   });
