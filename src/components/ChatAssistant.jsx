@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircleHeart, Send, X } from "lucide-react";
+import { BookOpen, MessageCircleHeart, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { askAssistant, CHAT_SUGGESTIONS } from "@/lib/health/chat";
