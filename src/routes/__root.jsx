@@ -14,6 +14,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { Disclaimer } from "@/components/Disclaimer";
 import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -118,6 +119,15 @@ function RootShell({ children }) {
 }
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [router, queryClient]);
   return <QueryClientProvider client={queryClient}>
       <a
     href="#main-content"
