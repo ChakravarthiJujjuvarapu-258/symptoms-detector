@@ -27,6 +27,7 @@ function ChatAssistant() {
     setInput("");
     setThinking(true);
     let reply = "";
+    let sources = [];
     try {
       const res = await aiHealthChat({
         data: {
@@ -36,12 +37,18 @@ function ChatAssistant() {
         }
       });
       reply = res?.reply ?? "";
+      sources = Array.isArray(res?.sources) ? res.sources : [];
     } catch (error) {
       console.error("AI chat failed, using offline answers", error);
     }
     setMessages((m) => [
       ...m,
-      { id: `${Date.now()}-a`, role: "assistant", text: reply || askAssistant(question) }
+      {
+        id: `${Date.now()}-a`,
+        role: "assistant",
+        text: reply || askAssistant(question),
+        sources
+      }
     ]);
     setThinking(false);
   };
