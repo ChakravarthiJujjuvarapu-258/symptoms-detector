@@ -42,6 +42,20 @@ function SiteHeader() {
               History
             </Link>
           </Button>
+          {user ? <Button
+    variant="ghost"
+    size="sm"
+    onClick={signOut}
+    title={user.email ?? user.phone ?? "Signed in"}
+  >
+              <LogOut className="size-4" aria-hidden="true" />
+              <span className="hidden sm:inline">Sign out</span>
+            </Button> : <Button asChild variant="ghost" size="sm">
+              <Link to="/auth" activeProps={{ className: "bg-accent text-accent-foreground" }}>
+                <LogIn className="size-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Sign in</span>
+              </Link>
+            </Button>}
           <Button
     variant="outline"
     size="icon"
