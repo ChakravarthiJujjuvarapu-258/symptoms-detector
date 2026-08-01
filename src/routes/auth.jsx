@@ -325,29 +325,73 @@ function AuthPage() {
                       id="auth-otp"
                       inputMode="numeric"
                       autoComplete="one-time-code"
+                      maxLength={6}
                       value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
+                      onChange={(e) => {
+                        setOtp(e.target.value.replace(/\D/g, ""));
+                        setOtpError("");
+                      }}
                       placeholder="123456"
-                      className="rounded-xl"
+                      disabled={codeExpired}
+                      aria-invalid={otpError !== ""}
+                      className="rounded-xl tracking-[0.4em]"
                     />
                     <p className="text-xs text-muted-foreground">Sent to {phone}</p>
                   </div>
-                  <Button type="submit" className="w-full rounded-xl" disabled={busy !== ""}>
+
+                  <div
+                    aria-live="polite"
+                    className={`rounded-xl px-3 py-2 text-xs ${
+                      codeExpired
+                        ? "bg-destructive/10 text-destructive"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {codeExpired
+                      ? "Your code has expired. Send a new one to continue."
+                      : `Code expires in ${formatCountdown(expiresIn)}`}
+                  </div>
+
+                  {otpError !== "" && (
+                    <p role="alert" className="text-xs font-medium text-destructive">
+                      {otpError}
+                    </p>
+                  )}
+
+                  <Button
+                    type="submit"
+                    className="w-full rounded-xl"
+                    disabled={busy !== "" || codeExpired}
+                  >
                     {busy === "otp-verify" && (
                       <Loader2 className="size-4 animate-spin" aria-hidden="true" />
                     )}
                     Verify and sign in
                   </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full rounded-xl"
+                    disabled={busy !== "" || resendIn > 0}
+                    onClick={() => requestOtp(true)}
+                  >
+                    {busy === "otp-resend" ? (
+                      <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                    ) : (
+                      <RotateCcw className="size-4" aria-hidden="true" />
+                    )}
+                    {resendIn > 0 ? `Resend code in ${resendIn}s` : "Resend code"}
+                  </Button>
+
                   <button
                     type="button"
                     className="w-full text-center text-sm text-muted-foreground underline-offset-4 hover:underline"
-                    onClick={() => {
-                      setOtpSent(false);
-                      setOtp("");
-                    }}
+                    onClick={resetPhoneStep}
                   >
                     Use a different number
                   </button>
+
                 </form>
               ) : (
                 <form className="space-y-3" onSubmit={sendOtp}>
