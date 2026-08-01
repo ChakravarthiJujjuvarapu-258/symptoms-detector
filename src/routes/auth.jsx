@@ -73,10 +73,25 @@ function AuthPage() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const [expiresAt, setExpiresAt] = useState(0);
+  const [resendAt, setResendAt] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
+
+  const expiresIn = Math.max(0, Math.ceil((expiresAt - now) / 1000));
+  const resendIn = Math.max(0, Math.ceil((resendAt - now) / 1000));
+  const codeExpired = otpSent && expiresIn === 0;
+
+  useEffect(() => {
+    if (!otpSent) return undefined;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [otpSent]);
 
   useEffect(() => {
     if (!loading && session) navigate({ to: "/", replace: true });
   }, [loading, session, navigate]);
+
 
   const withBusy = async (key, fn) => {
     setBusy(key);
