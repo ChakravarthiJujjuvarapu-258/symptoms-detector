@@ -4,17 +4,22 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  useNavigate,
   HeadContent,
   Scripts
 } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { Disclaimer } from "@/components/Disclaimer";
 import { Toaster } from "@/components/ui/sonner";
+import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+
 
 function NotFoundComponent() {
   return <div className="flex min-h-screen items-center justify-center bg-background px-4">
