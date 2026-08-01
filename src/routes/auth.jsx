@@ -147,40 +147,80 @@ function AuthPage() {
     });
   };
 
-  const sendOtp = (e) => {
-    e.preventDefault();
+  const requestOtp = (resend) => {
     const parsed = phoneSchema.safeParse(phone);
     if (!parsed.success) {
+      setOtpError(parsed.error.issues[0].message);
       toast.error(parsed.error.issues[0].message);
-      return;
+      return undefined;
     }
-    return withBusy("otp-send", async () => {
+    return withBusy(resend ? "otp-resend" : "otp-send", async () => {
+      setOtpError("");
       const { error } = await supabase.auth.signInWithOtp({ phone: parsed.data });
       if (error) {
-        toast.error(error.message);
+        const rateLimited = /rate|too many|seconds/i.test(error.message ?? "");
+        const message = rateLimited
+          ? "Too many requests. Wait a moment before asking for another code."
+          : `We couldn't send the code: ${error.message}`;
+        setOtpError(message);
+        toast.error(message);
+        if (rateLimited) setResendAt(Date.now() + 60_000);
         return;
       }
+      setOtp("");
       setOtpSent(true);
-      toast.success("We sent a 6-digit code to your phone.");
+      setExpiresAt(Date.now() + 10 * 60_000);
+      setResendAt(Date.now() + 45_000);
+      setNow(Date.now());
+      toast.success(resend ? "New code sent to your phone." : "We sent a 6-digit code to your phone.");
     });
+  };
+
+  const sendOtp = (e) => {
+    e.preventDefault();
+    return requestOtp(false);
   };
 
   const verifyOtp = (e) => {
     e.preventDefault();
+    if (codeExpired) {
+      setOtpError("That code has expired. Request a new one to continue.");
+      return undefined;
+    }
     const code = otp.trim();
     if (code.length < 4) {
-      toast.error("Enter the code you received");
-      return;
+      setOtpError("Enter the 6-digit code you received.");
+      return undefined;
     }
     return withBusy("otp-verify", async () => {
+      setOtpError("");
       const { error } = await supabase.auth.verifyOtp({
         phone: phone.trim(),
         token: code,
         type: "sms"
       });
-      if (error) toast.error(error.message);
+      if (error) {
+        const expired = /expire|invalid|token/i.test(error.message ?? "");
+        const message = expired
+          ? "That code is invalid or has expired. Request a new one."
+          : error.message;
+        setOtpError(message);
+        toast.error(message);
+      }
     });
   };
+
+  const resetPhoneStep = () => {
+    setOtpSent(false);
+    setOtp("");
+    setOtpError("");
+    setExpiresAt(0);
+    setResendAt(0);
+  };
+
+  const formatCountdown = (seconds) =>
+    `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+
 
   return (
     <div className="mx-auto flex max-w-md flex-col px-4 py-10 sm:py-16">
