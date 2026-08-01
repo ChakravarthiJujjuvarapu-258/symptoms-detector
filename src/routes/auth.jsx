@@ -75,7 +75,7 @@ function AuthPage() {
   const [otpSent, setOtpSent] = useState(false);
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/assessment", replace: true });
+    if (!loading && session) navigate({ to: "/", replace: true });
   }, [loading, session, navigate]);
 
   const withBusy = async (key, fn) => {
@@ -97,7 +97,7 @@ function AuthPage() {
         return;
       }
       if (result.redirected) return;
-      navigate({ to: "/assessment", replace: true });
+      navigate({ to: "/", replace: true });
     });
 
   const submitEmail = (e) => {
