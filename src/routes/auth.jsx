@@ -402,14 +402,24 @@ function AuthPage() {
                       type="tel"
                       autoComplete="tel"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                        setOtpError("");
+                      }}
                       placeholder="+14155550123"
+                      aria-invalid={otpError !== ""}
                       className="rounded-xl"
                     />
                     <p className="text-xs text-muted-foreground">
                       Include your country code. We'll text you a one-time code.
                     </p>
+                    {otpError !== "" && (
+                      <p role="alert" className="text-xs font-medium text-destructive">
+                        {otpError}
+                      </p>
+                    )}
                   </div>
+
                   <Button type="submit" className="w-full rounded-xl" disabled={busy !== ""}>
                     {busy === "otp-send" && (
                       <Loader2 className="size-4 animate-spin" aria-hidden="true" />
