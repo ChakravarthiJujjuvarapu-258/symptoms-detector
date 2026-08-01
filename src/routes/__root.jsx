@@ -4,17 +4,22 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  useNavigate,
   HeadContent,
   Scripts
 } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { Disclaimer } from "@/components/Disclaimer";
 import { Toaster } from "@/components/ui/sonner";
+import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+
 
 function NotFoundComponent() {
   return <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -117,6 +122,32 @@ function RootShell({ children }) {
       </body>
     </html>;
 }
+function AuthGate({ children }) {
+  const { session, loading } = useAuth();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAuthRoute = pathname === "/auth";
+
+  useEffect(() => {
+    if (!loading && !session && !isAuthRoute) {
+      navigate({ to: "/auth", replace: true });
+    }
+  }, [loading, session, isAuthRoute, navigate]);
+
+  if (isAuthRoute) return <Outlet />;
+
+  if (loading || !session) {
+    return (
+      <div className="flex min-h-[70dvh] items-center justify-center px-4">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" aria-hidden="true" />
+        <span className="sr-only">Checking your session</span>
+      </div>
+    );
+  }
+
+  return children;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
@@ -135,23 +166,26 @@ function RootComponent() {
   >
         Skip to content
       </a>
-      <SiteHeader />
-      <main id="main-content" className="min-h-[70dvh]">
-        {
-    /* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */
-  }
-        <Outlet />
-      </main>
-      <footer className="border-t border-border py-8">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <Disclaimer compact />
-        </div>
-      </footer>
-      <ChatAssistant />
+      <AuthGate>
+        <SiteHeader />
+        <main id="main-content" className="min-h-[70dvh]">
+          {
+      /* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */
+    }
+          <Outlet />
+        </main>
+        <footer className="border-t border-border py-8">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <Disclaimer compact />
+          </div>
+        </footer>
+        <ChatAssistant />
+      </AuthGate>
       <Toaster position="top-center" />
     </QueryClientProvider>;
 
 }
+
 export {
   Route
 };
