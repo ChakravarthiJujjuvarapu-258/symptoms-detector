@@ -78,7 +78,15 @@ export const aiAnalyzeSymptoms = createServerFn({ method: "POST" })
         explanation: String(c.explanation ?? ""),
         commonSymptoms: (c.commonSymptoms ?? []).slice(0, 6).map(String),
         treatment: String(c.treatment ?? ""),
+        medicines: (c.medicines ?? []).slice(0, 4).map((m) => ({
+          name: String(m?.name ?? ""),
+          type: String(m?.type ?? "over-the-counter"),
+          purpose: String(m?.purpose ?? ""),
+        })).filter((m) => m.name),
+        specialist: String(c.specialist ?? ""),
+        specialistReason: String(c.specialistReason ?? ""),
     }));
+
 
     const [conditions, generalRefs] = await Promise.all([
       enrichConditions(baseConditions),
