@@ -25,6 +25,8 @@ import { RiskBadge } from "./RiskBadge";
 import { RiskGauge } from "./RiskGauge";
 import { SymptomCategoryChart } from "./SymptomCategoryChart";
 import { RISK_META } from "@/lib/health/engine";
+import { conditionVisual } from "@/lib/health/imagery";
+
 import { exportAssessmentPdf } from "@/lib/health/export";
 function SectionCard({
   title,
