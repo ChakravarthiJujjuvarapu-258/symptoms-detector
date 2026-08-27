@@ -115,7 +115,19 @@ function ResultsDashboard({
           These are possibilities that match the pattern you described, with inherent uncertainty. A
           clinician is needed to confirm or exclude any of them.
         </p>
-        {result.conditions.map((c) => <div key={c.name} className="rounded-2xl border border-border bg-surface/60 p-4">
+        {result.conditions.map((c) => {
+          const visual = conditionVisual(c);
+          return <div key={c.name} className="rounded-2xl border border-border bg-surface/60 p-4">
+            <div className="grid gap-4 sm:grid-cols-[200px_minmax(0,1fr)]">
+              <img
+    src={visual.image}
+    alt={`${c.name} — ${visual.alt}`}
+    loading="lazy"
+    width={768}
+    height={512}
+    className="h-32 w-full rounded-xl border border-border object-cover sm:h-full"
+  />
+              <div className="min-w-0">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
               <h3 className="min-w-0 font-semibold">{c.name}</h3>
               <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
@@ -149,6 +161,43 @@ function ResultsDashboard({
                 <dd className="mt-1 text-sm text-muted-foreground">{c.treatment}</dd>
               </div>
             </dl>
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-border bg-background/60 p-3">
+                <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <Pill className="size-3.5 text-teal" aria-hidden="true" />
+                  Medicines commonly used
+                </p>
+                {c.medicines?.length ? <ul className="mt-2 space-y-1.5">
+                    {c.medicines.map((m) => <li key={m.name} className="text-sm">
+                        <span className="font-medium">{m.name}</span>
+                        {m.type ? <span className="ml-1.5 rounded-full bg-accent px-2 py-0.5 text-[11px] text-accent-foreground">
+                            {m.type}
+                          </span> : null}
+                        {m.purpose ? <span className="block text-xs text-muted-foreground">{m.purpose}</span> : null}
+                      </li>)}
+                  </ul> : <p className="mt-2 text-sm text-muted-foreground">
+                    No general medicine suggestions for this pattern — ask a clinician or pharmacist.
+                  </p>}
+                <p className="mt-2 text-[11px] text-muted-foreground">
+                  General information only. Never start, stop or dose medication without a
+                  clinician or pharmacist.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-background/60 p-3">
+                <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <UserRound className="size-3.5 text-teal" aria-hidden="true" />
+                  Doctor to consult
+                </p>
+                <p className="mt-2 text-sm font-medium">{c.specialist || visual.specialist}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {c.specialistReason ||
+                    "Start with a general physician, who can refer you onward if needed."}
+                </p>
+              </div>
+            </div>
+
             {c.citations?.length ? <div className="mt-3 border-t border-border pt-3">
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Verified against medical references
