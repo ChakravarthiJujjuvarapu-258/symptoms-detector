@@ -216,7 +216,11 @@ function ResultsDashboard({
                     </li>)}
                 </ul>
               </div> : null}
-          </div>)}
+              </div>
+            </div>
+          </div>;
+        })}
+
       </SectionCard>
 
       {result.sources?.length ? <SectionCard title="Sources & citations" icon={BookOpen} delay={210} className="space-y-3">
