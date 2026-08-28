@@ -14,6 +14,7 @@ import { Route as HistoryRouteImport } from './routes/history'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiAnalyzeSymptomImageRouteImport } from './routes/api/analyze-symptom-image'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -40,6 +41,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAnalyzeSymptomImageRoute = ApiAnalyzeSymptomImageRouteImport.update({
+  id: '/api/analyze-symptom-image',
+  path: '/api/analyze-symptom-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/analyze-symptom-image': typeof ApiAnalyzeSymptomImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/analyze-symptom-image': typeof ApiAnalyzeSymptomImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,33 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/analyze-symptom-image': typeof ApiAnalyzeSymptomImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/assessment' | '/auth' | '/history' | '/sitemap.xml'
+  fullPaths:
+    | '/'
+    | '/assessment'
+    | '/auth'
+    | '/history'
+    | '/sitemap.xml'
+    | '/api/analyze-symptom-image'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assessment' | '/auth' | '/history' | '/sitemap.xml'
-  id: '__root__' | '/' | '/assessment' | '/auth' | '/history' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/assessment'
+    | '/auth'
+    | '/history'
+    | '/sitemap.xml'
+    | '/api/analyze-symptom-image'
+  id:
+    | '__root__'
+    | '/'
+    | '/assessment'
+    | '/auth'
+    | '/history'
+    | '/sitemap.xml'
+    | '/api/analyze-symptom-image'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +105,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   HistoryRoute: typeof HistoryRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiAnalyzeSymptomImageRoute: typeof ApiAnalyzeSymptomImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/analyze-symptom-image': {
+      id: '/api/analyze-symptom-image'
+      path: '/api/analyze-symptom-image'
+      fullPath: '/api/analyze-symptom-image'
+      preLoaderRoute: typeof ApiAnalyzeSymptomImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   HistoryRoute: HistoryRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiAnalyzeSymptomImageRoute: ApiAnalyzeSymptomImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
