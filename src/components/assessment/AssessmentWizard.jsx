@@ -64,20 +64,33 @@ function AssessmentWizard({ onComplete }) {
     let result = analyzeSymptoms(input);
     try {
       const ai = await analyzeWithAi({
-        data: { symptoms, profile, history, extras, risk: result.risk }
+        data: {
+          symptoms,
+          profile,
+          history,
+          extras,
+          risk: result.risk,
+          matchedSymptoms: result.matchedSymptoms,
+          categories: result.categories,
+          emergency: result.emergency
+        }
       });
       if (ai?.conditions?.length) {
         result = {
           ...result,
+          risk: ai.riskLevel || result.risk,
           conditions: ai.conditions,
           recommendations: ai.recommendations?.length ? ai.recommendations : result.recommendations,
           tests: ai.tests?.length ? ai.tests : result.tests,
+          redFlags: ai.redFlags?.length ? ai.redFlags : undefined,
+          followUpQuestions: ai.followUpQuestions?.length ? ai.followUpQuestions : undefined,
           summary: ai.summary || undefined,
           sources: ai.sources?.length ? ai.sources : undefined,
 
           aiPowered: true
         };
       }
+
     } catch (error) {
       console.error("AI analysis failed, using local engine", error);
       toast.message("Using offline analysis", {
