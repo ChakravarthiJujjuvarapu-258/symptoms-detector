@@ -37,6 +37,11 @@ function SiteHeader() {
               Assessment
             </Link>
           </Button>
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <Link to="/image-analysis" activeProps={{ className: "bg-accent text-accent-foreground" }}>
+              Image analysis
+            </Link>
+          </Button>
           <Button asChild variant="ghost" size="sm">
             <Link to="/history" activeProps={{ className: "bg-accent text-accent-foreground" }}>
               History
