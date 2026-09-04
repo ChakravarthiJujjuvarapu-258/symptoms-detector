@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as NearbyRouteImport } from './routes/nearby'
 import { Route as ImageAnalysisRouteImport } from './routes/image-analysis'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -20,6 +21,11 @@ import { Route as ApiAnalyzeSymptomImageRouteImport } from './routes/api/analyze
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NearbyRoute = NearbyRouteImport.update({
+  id: '/nearby',
+  path: '/nearby',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImageAnalysisRoute = ImageAnalysisRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/image-analysis': typeof ImageAnalysisRoute
+  '/nearby': typeof NearbyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/analyze-symptom-image': typeof ApiAnalyzeSymptomImageRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/image-analysis': typeof ImageAnalysisRoute
+  '/nearby': typeof NearbyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/analyze-symptom-image': typeof ApiAnalyzeSymptomImageRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/image-analysis': typeof ImageAnalysisRoute
+  '/nearby': typeof NearbyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/analyze-symptom-image': typeof ApiAnalyzeSymptomImageRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/history'
     | '/image-analysis'
+    | '/nearby'
     | '/sitemap.xml'
     | '/api/analyze-symptom-image'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/history'
     | '/image-analysis'
+    | '/nearby'
     | '/sitemap.xml'
     | '/api/analyze-symptom-image'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/history'
     | '/image-analysis'
+    | '/nearby'
     | '/sitemap.xml'
     | '/api/analyze-symptom-image'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   HistoryRoute: typeof HistoryRoute
   ImageAnalysisRoute: typeof ImageAnalysisRoute
+  NearbyRoute: typeof NearbyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiAnalyzeSymptomImageRoute: typeof ApiAnalyzeSymptomImageRoute
 }
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nearby': {
+      id: '/nearby'
+      path: '/nearby'
+      fullPath: '/nearby'
+      preLoaderRoute: typeof NearbyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/image-analysis': {
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   HistoryRoute: HistoryRoute,
   ImageAnalysisRoute: ImageAnalysisRoute,
+  NearbyRoute: NearbyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiAnalyzeSymptomImageRoute: ApiAnalyzeSymptomImageRoute,
 }
