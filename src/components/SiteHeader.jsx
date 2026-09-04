@@ -42,6 +42,11 @@ function SiteHeader() {
               Image analysis
             </Link>
           </Button>
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <Link to="/nearby" activeProps={{ className: "bg-accent text-accent-foreground" }}>
+              Nearby care
+            </Link>
+          </Button>
           <Button asChild variant="ghost" size="sm">
             <Link to="/history" activeProps={{ className: "bg-accent text-accent-foreground" }}>
               History

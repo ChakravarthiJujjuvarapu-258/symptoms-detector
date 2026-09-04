@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Disclaimer } from "@/components/Disclaimer";
+import { DiscussWithDoctor } from "./DiscussWithDoctor";
 import { EmergencyBanner } from "./EmergencyBanner";
 import { HealthScoreRing } from "./HealthScoreRing";
 import { RiskBadge } from "./RiskBadge";
@@ -78,7 +79,8 @@ function ResultsDashboard({
             Possible directions only — never a confirmed diagnosis.
           </p>
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <DiscussWithDoctor result={result} />
           <Button
     variant="outline"
     className="rounded-xl"
