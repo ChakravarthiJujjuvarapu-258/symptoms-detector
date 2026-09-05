@@ -48,6 +48,7 @@ const MAPS_KEY = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY;
 function NearbyPage() {
   const [category, setCategory] = useState("hospital");
   const [coords, setCoords] = useState(null);
+  const [accuracy, setAccuracy] = useState(null);
   const [places, setPlaces] = useState([]);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -60,16 +61,55 @@ function NearbyPage() {
       return;
     }
     setLoading(true);
+    let settled = false;
+    let watchId = null;
+
+    const clearWatch = () => {
+      if (watchId != null) navigator.geolocation.clearWatch(watchId);
+      watchId = null;
+    };
+
+    const finish = (pos) => {
+      setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      setAccuracy(Math.round(pos.coords.accuracy));
+      setLoading(false);
+    };
+
+    // First get a fast fix...
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        setLoading(false);
+        settled = true;
+        finish(pos);
+        // ...then keep refining with high-accuracy GPS for a better fix.
+        watchId = navigator.geolocation.watchPosition(
+          (better) => {
+            if (better.coords.accuracy <= pos.coords.accuracy) {
+              finish(better);
+              if (better.coords.accuracy <= 50) clearWatch();
+            }
+          },
+          () => {},
+          { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 }
+        );
+        // Stop refining after 20s regardless.
+        setTimeout(clearWatch, 20000);
       },
       () => {
-        setLoading(false);
-        setError("Location permission denied. Allow location access to find nearby care.");
+        if (settled) return;
+        // High-accuracy attempt failed — retry once with low accuracy (network/IP based).
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            settled = true;
+            finish(pos);
+          },
+          () => {
+            setLoading(false);
+            setError("Location permission denied. Allow location access to find nearby care.");
+          },
+          { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+        );
       },
-      { enableHighAccuracy: true, timeout: 12000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   }, []);
 
@@ -137,6 +177,14 @@ function NearbyPage() {
           Use my location
         </Button>
       </div>
+
+      {coords && accuracy != null ? (
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <MapPin className="size-3.5" aria-hidden="true" />
+          Location accurate to ~{accuracy} m
+          {accuracy > 500 ? " — move outdoors or enable GPS for a more precise fix." : ""}
+        </p>
+      ) : null}
 
       {error ? (
         <p role="status" className="rounded-2xl border border-border bg-surface/60 p-4 text-sm text-muted-foreground">
