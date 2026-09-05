@@ -1,392 +1,156 @@
-# Health Insight AI
-
-Build a modern, responsive web application called "AI Symptoms Detector".
-
-Objective:
-
-Create an AI-powered symptom checker that allows users to enter their symptoms in natural language and receive possible health insights, risk levels, and recommendations. The application should clearly state that it is NOT a replacement for professional medical advice.
-
-Design:
-
-- Modern medical theme
-
-- Blue, white, and teal color palette
-
-- Clean dashboard layout
-
-- Rounded cards
-
-- Responsive for mobile, tablet, and desktop
-
-- Smooth animations
-
-- Dark mode support
-
-Landing Page:
-
-- Hero section with title:
-
-  "AI Symptoms Detector"
-
-- Subtitle:
-
-  "Describe your symptoms and receive AI-powered health insights."
-
-- CTA button:
-
-  "Start Assessment"
-
-Main Assessment Interface:
-
-Step 1:
-
-Collect:
-
-- Age
-
-- Gender
-
-- Height
-
-- Weight
-
-Step 2:
-
-Medical History
-
-Checkboxes:
-
-- Diabetes
-
-- Hypertension
-
-- Heart Disease
-
-- Asthma
-
-- Cancer
-
-- Kidney Disease
-
-- Liver Disease
-
-- Pregnancy
-
-- Allergies
-
-- None
-
-Step 3:
-
-Symptoms Input
-
-Large textarea:
-
-Placeholder:
-
-"Example: I have had a fever for 3 days with sore throat, headache, cough, and fatigue."
-
-Allow users to:
-
-- Type naturally
-
-- Add multiple symptoms
-
-- Mention duration
-
-- Mention severity
-
-Step 4:
-
-Additional Questions
-
-Dropdown:
-
-Duration
-
-- Less than 24 hours
-
-- 1–3 days
-
-- 4–7 days
-
-- More than a week
-
-Pain Scale
-
-Slider 1–10
-
-Temperature
-
-Optional input
-
-Recent travel?
-
-Yes / No
-
-Recent contact with sick person?
-
-Yes / No
-
-Smoker?
-
-Yes / No
-
-Alcohol use?
-
-Yes / No
-
-Analyze Button
-
-When clicked:
-
-Show loading animation:
-
-"AI is analyzing your symptoms..."
-
-Simulate AI thinking.
-
-Results Dashboard
-
-Display cards:
-
-Possible Conditions
-
-Show 3–5 possible conditions.
-
-Each includes:
-
-- Confidence %
-
-- Brief explanation
-
-- Common symptoms
-
-- Typical treatment overview
-
-Risk Level
-
-Colored badge:
-
-Green
-
-Low
-
-Yellow
-
-Moderate
-
-Orange
-
-High
-
-Red
-
-Emergency
-
-Recommendations
-
-Hydration
-
-Rest
-
-Monitor symptoms
-
-Book doctor appointment
-
-Visit urgent care
-
-Call emergency services if severe symptoms
-
-Suggested Tests
-
-Example:
-
-- CBC
-
-- COVID Test
-
-- Influenza Test
-
-- Chest X-ray
-
-- Blood Sugar
-
-- ECG
-
-- Urine Analysis
-
-Health Score
-
-Circular progress indicator
-
-0–100
-
-Timeline
-
-Symptoms entered
-
-Analysis completed
-
-Suggested next actions
-
-Emergency Detection
-
-If symptoms include keywords like:
-
-- chest pain
-
-- difficulty breathing
-
-- severe bleeding
-
-- unconscious
-
-- stroke
-
-- seizures
-
-Immediately display a red emergency warning:
-
-"Your symptoms may indicate a medical emergency. Seek immediate medical attention or call your local emergency services."
-
-History Page
-
-Store previous assessments locally.
-
-Each record contains:
-
-- Date
-
-- Symptoms
-
-- Risk level
-
-- Conditions
-
-Allow:
-
-- Search
-
-- Delete
-
-- Export PDF
-
-AI Chat Assistant
-
-Floating chatbot.
-
-Users can ask:
-
-"What does sore throat mean?"
-
-"Can fever and cough indicate flu?"
-
-"What foods help recovery?"
-
-Chat should provide educational information only.
-
-Disclaimer
-
-Always display:
-
-"This application provides informational and educational guidance only. It is not a medical diagnosis and should not replace consultation with a qualified healthcare professional. If you have severe or worsening symptoms, seek medical care immediately."
-
-Technology
-
-Use:
-
-- React
-
-- TypeScript
-
-- Tailwind CSS
-
-- Responsive layout
-
-- Component-based architecture
-
-- Clean code
-
-- Local storage for history
-
-Charts
-
-Use:
-
-- Pie chart for symptom categories
-
-- Risk gauge
-
-- Health score chart
-
-Accessibility
-
-- WCAG compliant
-
-- Keyboard navigation
-
-- Screen reader friendly
-
-- High contrast support
-
-Performance
-
-- Fast loading
-
-- Lazy loading components
-
-- Optimized rendering
-
-Future Ready
-
-Structure code so it can easily integrate with:
-
-- OpenAI API
-
-- Gemini API
-
-- Claude API
-
-- Medical knowledge APIs
-
-- Electronic Health Records (EHR)
-
-Important Safety Rules
-
-- Never claim to provide a definitive diagnosis.
-
-- Present results as possible conditions, not confirmed diseases.
-
-- Always include uncertainty.
-
-- Always recommend professional medical evaluation when appropriate.
-
-- Prioritize safety by escalating emergency symptoms immediately.
-
-- Clearly distinguish educational information from medical advice.
-
-Generate production-quality UI with reusable components, modern animations, and maintainable code.
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://symptoms-detector.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/4b470c9a-3cc0-4c3f-8775-91ac50e4184e).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+# AI Symptoms Detector
+
+A modern, AI-powered health information web application that helps users understand possible causes for their symptoms through natural language analysis, image analysis, and educational chat. Built as a responsive, accessibility-first React application with a professional medical design system.
+
+> **Important:** This application provides informational and educational guidance only. It is not a medical diagnosis tool and should never replace consultation with a qualified healthcare professional. If you have severe or worsening symptoms, seek medical care immediately.
+
+**Live app:** https://symptoms-detector.lovable.app
+
+---
+
+## Features
+
+### Symptom Assessment
+- Multi-step wizard collecting demographics, medical history, symptom description, duration, pain scale, temperature, and lifestyle factors.
+- AI-powered analysis via a secure server-side Lovable AI Gateway (`openai/gpt-5.6-sol`) with a rule-based safety fallback.
+- Possible conditions with calibrated confidence ranges, matched/against features, urgency level, and red-flag detection.
+- Risk level badge (Low / Moderate / High / Emergency) and animated health score ring.
+- Suggested tests, generic over-the-counter guidance, specialist recommendation, and follow-up questions.
+- Structured MedlinePlus citations for educational reference.
+
+### Image Analysis
+- Upload JPG, JPEG, PNG, or WEBP symptom images via drag-and-drop or file picker.
+- Preview, remove, and replace images before analysis.
+- Vision-model analysis identifying visible features and possible conditions with Low/Moderate/High match ranges.
+- Educational reference images clearly labelled as non-diagnostic.
+- Image quality validation with an insufficient-quality fallback.
+
+### AI Health Chat Assistant
+- Floating educational chatbot for health questions.
+- Context-aware answers with structured MedlinePlus references.
+- Strict safety guardrails: no diagnosis, no prescriptions, emergency escalation when needed.
+
+### Doctor Consultation
+- "Discuss With a Doctor" live consultation chat powered by a streamed AI consultant persona.
+- Generated report with copy, PDF export, email sharing, and nearby care finder integration.
+
+### Nearby Healthcare Finder
+- Find nearby hospitals, clinics, pharmacies, and emergency services.
+- Live map integration, distance sorting, and one-tap call/directions.
+
+### History & Reports
+- Local-storage persistence of past assessments.
+- Search, delete, and export individual reports.
+
+### Authentication
+- Email/password and Google OAuth sign-in.
+- Mobile OTP sign-in with resend cooldown and expiry handling.
+- Auth-gated app entry with automatic redirect to login.
+
+---
+
+## Tech Stack
+
+- **Framework:** [TanStack Start](https://tanstack.com/start) (React 19, file-based routing, SSR/SSG)
+- **Build Tool:** Vite 7
+- **Styling:** Tailwind CSS v4 with native CSS theme tokens
+- **UI Components:** shadcn/ui
+- **Charts:** recharts
+- **Icons:** Lucide React
+- **Backend:** Lovable Cloud (Supabase) — auth, profiles, database
+- **AI:** Lovable AI Gateway via secure `createServerFn` server functions
+- **Medical References:** MedlinePlus Health Topics API
+- **Language:** JavaScript (JSX) with TypeScript for framework-required files
+
+---
+
+## Project Structure
+
+```
+src/
+  components/        # Reusable UI components (header, chat, disclaimer, assessment, results)
+  hooks/             # Custom React hooks (auth, mobile, theme)
+  integrations/      # Lovable Cloud / Supabase clients and auth middleware
+  lib/               # Utility functions and health domain logic
+    health/            # Analysis engine, AI functions, chat, consult, imagery, storage, export
+  routes/            # TanStack file-based routes
+    api/               # Server API endpoints (image analysis, etc.)
+    assessment.jsx
+    auth.jsx
+    history.jsx
+    image-analysis.jsx
+    nearby.jsx
+    index.jsx
+  styles.css         # Global design tokens and Tailwind imports
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (LTS recommended)
+- npm or bun
+
+### Install dependencies
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm install
+```
+
+### Run the development server
+
+```sh
 npm run dev
 ```
+
+The app will be available at `http://localhost:8080`.
+
+### Build for production
+
+```sh
+npm run build
+```
+
+---
+
+## Environment Variables
+
+Server-side variables are read inside handlers only. The frontend uses `import.meta.env.VITE_*` for public config.
+
+| Variable | Purpose |
+|----------|---------|
+| `LOVABLE_API_KEY` | Lovable AI Gateway key for server-side AI calls |
+| `VITE_SUPABASE_URL` | Lovable Cloud project URL (auto-generated) |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Lovable Cloud anon/public key (auto-generated) |
+
+Do not commit secrets. On Lovable Cloud, secrets are managed through the Lovable backend UI.
+
+---
+
+## Safety & Ethics
+
+- The app never claims to provide a definitive diagnosis.
+- Results are always presented as possible conditions with uncertainty.
+- Emergency keywords trigger an immediate red emergency warning.
+- Prescription medication and dosage recommendations are not provided.
+- Users are always encouraged to consult a qualified healthcare professional.
+
+---
+
+## Deployment
+
+This project is built and deployed through [Lovable](https://lovable.dev). Every change in the Lovable editor is committed to the connected repository, and the published app updates automatically.
+
+To enable GitHub sync, open the Lovable editor and select **+ → GitHub → Connect project**, authorize GitHub, choose your account or organization, and click **Create Repository**.
+
+---
+
+## License
+
+This project is generated for educational and demonstration purposes. The code is yours to modify and extend.
+
+---
+
+Built with [Lovable](https://lovable.dev).
