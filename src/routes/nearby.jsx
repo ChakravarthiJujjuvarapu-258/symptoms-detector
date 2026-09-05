@@ -50,10 +50,50 @@ function NearbyPage() {
   const [category, setCategory] = useState("hospital");
   const [coords, setCoords] = useState(null);
   const [accuracy, setAccuracy] = useState(null);
+  const [locationSource, setLocationSource] = useState("gps");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
   const [places, setPlaces] = useState([]);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const searchArea = useCallback(async (e) => {
+    e?.preventDefault();
+    const query = searchQuery.trim();
+    if (query.length < 3) {
+      setError("Type an area, city or pincode (at least 3 characters).");
+      return;
+    }
+    setSearching(true);
+    setError("");
+    try {
+      const res = await geocodeLocation({ data: { query } });
+      setSearchResults(res.results ?? []);
+      if (res.results?.length === 1) {
+        setCoords({ lat: res.results[0].lat, lng: res.results[0].lng });
+        setAccuracy(null);
+        setLocationSource("manual");
+        setSearchResults([]);
+      } else if (res.message) {
+        setError(res.message);
+      }
+    } catch (err) {
+      setError(err?.message || "Location search failed. Please try again.");
+    } finally {
+      setSearching(false);
+    }
+  }, [searchQuery]);
+
+  const pickArea = useCallback((r) => {
+    setCoords({ lat: r.lat, lng: r.lng });
+    setAccuracy(null);
+    setLocationSource("manual");
+    setSearchResults([]);
+    setSearchQuery(r.label);
+    setError("");
+  }, []);
 
   const locate = useCallback(() => {
     setError("");
