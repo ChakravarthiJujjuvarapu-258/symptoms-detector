@@ -178,6 +178,14 @@ function NearbyPage() {
         </Button>
       </div>
 
+      {coords && accuracy != null ? (
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <MapPin className="size-3.5" aria-hidden="true" />
+          Location accurate to ~{accuracy} m
+          {accuracy > 500 ? " — move outdoors or enable GPS for a more precise fix." : ""}
+        </p>
+      ) : null}
+
       {error ? (
         <p role="status" className="rounded-2xl border border-border bg-surface/60 p-4 text-sm text-muted-foreground">
           {error}
