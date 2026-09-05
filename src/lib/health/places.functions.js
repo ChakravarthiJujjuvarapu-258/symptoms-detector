@@ -127,6 +127,46 @@ export const findNearbyHealthcare = createServerFn({ method: "POST" })
     return { places, unavailable: false, message: "" };
   });
 
+/** Geocode a user-typed place/address/pincode so the map can be corrected manually. */
+export const geocodeLocation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => {
+    const query = String(input?.query ?? "").trim();
+    if (query.length < 3 || query.length > 200) throw new Error("Enter a place, area or pincode.");
+    return { query };
+  })
+  .handler(async ({ data }) => {
+    const lovableKey = process.env.LOVABLE_API_KEY;
+    const mapsKey = process.env.GOOGLE_MAPS_API_KEY;
+    if (!lovableKey || !mapsKey) {
+      return { results: [], unavailable: true, message: "Location search is not configured." };
+    }
+
+    const response = await fetch(
+      `${GATEWAY_URL}/maps/api/geocode/json?address=${encodeURIComponent(data.query)}`,
+      { headers: { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": mapsKey } }
+    );
+
+    if (!response.ok) {
+      const body = await response.text();
+      console.error(`[geocode] gateway failed [${response.status}]: ${body}`);
+      throw new Error(`Location search failed [${response.status}]`);
+    }
+
+    const json = await response.json();
+    if (json.status !== "OK") {
+      return { results: [], unavailable: false, message: "No matching place found. Try a more specific area or pincode." };
+    }
+
+    const results = json.results.slice(0, 5).map((r) => ({
+      label: r.formatted_address,
+      lat: r.geometry?.location?.lat,
+      lng: r.geometry?.location?.lng
+    })).filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lng));
+
+    return { results, unavailable: false, message: "" };
+  });
+
 function haversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;

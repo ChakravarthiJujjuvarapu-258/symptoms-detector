@@ -14,7 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Disclaimer } from "@/components/Disclaimer";
-import { findNearbyHealthcare } from "@/lib/health/places.functions";
+import { findNearbyHealthcare, geocodeLocation } from "@/lib/health/places.functions";
+import { Input } from "@/components/ui/input";
 
 const Route = createFileRoute("/nearby")({
   head: () => ({
