@@ -1,113 +1,121 @@
 # AI Symptoms Detector
 
-A modern, AI-powered health information web application that helps users understand possible causes for their symptoms through natural language analysis, image analysis, and educational chat. Built as a responsive, accessibility-first React application with a professional medical design system.
+A smart, easy-to-use health information web app that helps you understand what might be causing your symptoms. It uses artificial intelligence to analyze symptoms you describe in words, images you upload, and questions you ask in a chat. The app is designed to look and feel like a professional healthcare tool, and it works smoothly on phones, tablets, and computers.
 
-> **Important:** This application provides informational and educational guidance only. It is not a medical diagnosis tool and should never replace consultation with a qualified healthcare professional. If you have severe or worsening symptoms, seek medical care immediately.
+> **Important:** This app is for educational and informational purposes only. It cannot diagnose medical conditions. Always talk to a qualified doctor or healthcare provider for a proper diagnosis and treatment. If your symptoms are severe, getting worse, or feel like an emergency, seek medical help right away.
 
-**Live app:** https://symptoms-detector.lovable.app
-
----
-
-## Features
-
-### Symptom Assessment
-- Multi-step wizard collecting demographics, medical history, symptom description, duration, pain scale, temperature, and lifestyle factors.
-- AI-powered analysis via a secure server-side Lovable AI Gateway (`openai/gpt-5.6-sol`) with a rule-based safety fallback.
-- Possible conditions with calibrated confidence ranges, matched/against features, urgency level, and red-flag detection.
-- Risk level badge (Low / Moderate / High / Emergency) and animated health score ring.
-- Suggested tests, generic over-the-counter guidance, specialist recommendation, and follow-up questions.
-- Structured MedlinePlus citations for educational reference.
-
-### Image Analysis
-- Upload JPG, JPEG, PNG, or WEBP symptom images via drag-and-drop or file picker.
-- Preview, remove, and replace images before analysis.
-- Vision-model analysis identifying visible features and possible conditions with Low/Moderate/High match ranges.
-- Educational reference images clearly labelled as non-diagnostic.
-- Image quality validation with an insufficient-quality fallback.
-
-### AI Health Chat Assistant
-- Floating educational chatbot for health questions.
-- Context-aware answers with structured MedlinePlus references.
-- Strict safety guardrails: no diagnosis, no prescriptions, emergency escalation when needed.
-
-### Doctor Consultation
-- "Discuss With a Doctor" live consultation chat powered by a streamed AI consultant persona.
-- Generated report with copy, PDF export, email sharing, and nearby care finder integration.
-
-### Nearby Healthcare Finder
-- Find nearby hospitals, clinics, pharmacies, and emergency services.
-- Live map integration, distance sorting, and one-tap call/directions.
-
-### History & Reports
-- Local-storage persistence of past assessments.
-- Search, delete, and export individual reports.
-
-### Authentication
-- Email/password and Google OAuth sign-in.
-- Mobile OTP sign-in with resend cooldown and expiry handling.
-- Auth-gated app entry with automatic redirect to login.
+**Live website:** https://symptoms-detector.lovable.app
 
 ---
 
-## Tech Stack
+## What This App Can Do
 
-- **Framework:** [TanStack Start](https://tanstack.com/start) (React 19, file-based routing, SSR/SSG)
-- **Build Tool:** Vite 7
-- **Styling:** Tailwind CSS v4 with native CSS theme tokens
-- **UI Components:** shadcn/ui
-- **Charts:** recharts
+### 1. Symptom Checker
+- Answer simple step-by-step questions about your age, medical history, symptoms, how long they have lasted, pain level, body temperature, and daily habits.
+- The app uses AI to look at your answers and suggest possible health conditions that might match.
+- It also shows:
+  - How likely each condition might be (Low, Moderate, or High match).
+  - Symptoms that support and do not support each suggestion.
+  - Urgency level and any warning signs that need quick medical attention.
+  - A risk badge and a visual health score.
+  - Suggested medical tests, general care tips, and the right type of doctor to visit.
+  - Follow-up questions the AI would ask a real doctor.
+  - Trusted medical references from MedlinePlus.
+
+### 2. Symptom Image Analysis
+- Upload a clear photo of a visible symptom, such as a skin rash, swelling, or redness.
+- You can drag and drop the image or use the file picker.
+- Preview, remove, or replace the image before analyzing it.
+- The AI looks for visible features like redness, swelling, spots, scaling, or texture changes.
+- It suggests possible conditions with Low, Moderate, or High match ranges.
+- It shows educational medical reference images with clear labels that they are not a diagnosis.
+- If the image is blurry or unclear, the app asks you to upload a better photo.
+
+### 3. AI Health Chat Assistant
+- A friendly floating chatbot answers general health questions.
+- It gives educational answers and shows trusted MedlinePlus references.
+- It follows strict safety rules: it does not diagnose, does not prescribe medicine, and tells you to see a doctor when needed.
+
+### 4. Talk to a Doctor
+- A "Discuss With a Doctor" feature opens a live consultation chat with an AI doctor assistant.
+- The AI doctor assistant reviews your generated report, asks focused questions, and guides you toward proper medical care.
+- You can copy your report, download it as a PDF, or share it by email.
+- The assistant also helps you find nearby hospitals, clinics, and pharmacies.
+
+### 5. Nearby Healthcare Finder
+- Find hospitals, clinics, pharmacies, and emergency services near your current location.
+- Shows a live map, distance from your location, ratings, open status, and one-tap buttons to call or get directions.
+- Uses your device location with high accuracy when you allow it.
+
+### 6. History and Reports
+- Saves your past symptom assessments in your browser's local storage.
+- You can search, view, delete, or export any past report.
+
+### 7. User Login
+- Sign in with email and password, Google account, or mobile phone OTP.
+- The app asks you to log in before you can use the main features.
+- Mobile OTP includes a resend button and clear messages if the code expires or fails to send.
+
+---
+
+## Technologies Used
+
+- **Frontend framework:** TanStack Start with React 19
+- **Build tool:** Vite 7
+- **Styling:** Tailwind CSS v4 with a clean medical design system
+- **UI components:** shadcn/ui
+- **Charts and visuals:** recharts
 - **Icons:** Lucide React
-- **Backend:** Lovable Cloud (Supabase) — auth, profiles, database
-- **AI:** Lovable AI Gateway via secure `createServerFn` server functions
-- **Medical References:** MedlinePlus Health Topics API
-- **Language:** JavaScript (JSX) with TypeScript for framework-required files
+- **Backend and authentication:** Lovable Cloud (powered by Supabase)
+- **AI engine:** Lovable AI Gateway with secure server-side calls
+- **Medical references:** MedlinePlus Health Topics API
+- **Programming language:** JavaScript (JSX) with some TypeScript files required by the framework
 
 ---
 
-## Project Structure
+## Folder Structure
 
 ```
 src/
-  components/        # Reusable UI components (header, chat, disclaimer, assessment, results)
-  hooks/             # Custom React hooks (auth, mobile, theme)
-  integrations/      # Lovable Cloud / Supabase clients and auth middleware
-  lib/               # Utility functions and health domain logic
-    health/            # Analysis engine, AI functions, chat, consult, imagery, storage, export
-  routes/            # TanStack file-based routes
-    api/               # Server API endpoints (image analysis, etc.)
-    assessment.jsx
-    auth.jsx
-    history.jsx
-    image-analysis.jsx
-    nearby.jsx
-    index.jsx
-  styles.css         # Global design tokens and Tailwind imports
+  components/        # Reusable parts of the user interface
+  hooks/             # Custom logic for login, mobile view, and theme
+  integrations/      # Lovable Cloud connection and auth setup
+  lib/               # Helper functions and health-related logic
+    health/            # AI analysis, chat, doctor consult, image handling, reports
+  routes/            # Pages of the app
+    api/               # Server-side API endpoints
+    assessment.jsx     # Symptom checker page
+    auth.jsx           # Login page
+    history.jsx        # Past reports page
+    image-analysis.jsx # Image analysis page
+    nearby.jsx         # Nearby healthcare finder page
+    index.jsx          # Home page
+  styles.css         # Global colors, fonts, and Tailwind setup
 ```
 
 ---
 
-## Getting Started
+## How to Run the Project Locally
 
-### Prerequisites
+### What you need
+- Node.js (LTS version recommended)
+- npm or bun package manager
 
-- Node.js (LTS recommended)
-- npm or bun
-
-### Install dependencies
+### Step 1: Install dependencies
 
 ```sh
 npm install
 ```
 
-### Run the development server
+### Step 2: Start the development server
 
 ```sh
 npm run dev
 ```
 
-The app will be available at `http://localhost:8080`.
+Open your browser and go to `http://localhost:8080`.
 
-### Build for production
+### Step 3: Build for production
 
 ```sh
 npm run build
@@ -117,39 +125,46 @@ npm run build
 
 ## Environment Variables
 
-Server-side variables are read inside handlers only. The frontend uses `import.meta.env.VITE_*` for public config.
+These settings are used to connect the app to AI services and the backend. Server-side variables are read only inside secure handlers. Public frontend settings use the `VITE_` prefix.
 
 | Variable | Purpose |
 |----------|---------|
-| `LOVABLE_API_KEY` | Lovable AI Gateway key for server-side AI calls |
-| `VITE_SUPABASE_URL` | Lovable Cloud project URL (auto-generated) |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Lovable Cloud anon/public key (auto-generated) |
+| `LOVABLE_API_KEY` | Key for calling the Lovable AI Gateway from the server |
+| `VITE_SUPABASE_URL` | Your Lovable Cloud project URL (created automatically) |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Public key for connecting to Lovable Cloud (created automatically) |
 
-Do not commit secrets. On Lovable Cloud, secrets are managed through the Lovable backend UI.
-
----
-
-## Safety & Ethics
-
-- The app never claims to provide a definitive diagnosis.
-- Results are always presented as possible conditions with uncertainty.
-- Emergency keywords trigger an immediate red emergency warning.
-- Prescription medication and dosage recommendations are not provided.
-- Users are always encouraged to consult a qualified healthcare professional.
+Do not share or commit secret keys. On Lovable Cloud, secrets are managed safely through the Lovable backend settings.
 
 ---
 
-## Deployment
+## Safety and Ethics
 
-This project is built and deployed through [Lovable](https://lovable.dev). Every change in the Lovable editor is committed to the connected repository, and the published app updates automatically.
+- The app never gives a final diagnosis.
+- All results are shown as possible conditions with uncertainty.
+- Emergency symptoms trigger a clear red warning to seek immediate care.
+- The app does not recommend prescription medicines or dosages.
+- Users are always encouraged to consult a real healthcare professional.
+- Uploaded images are only used for analysis and are not stored permanently unless the user chooses to save them.
 
-To enable GitHub sync, open the Lovable editor and select **+ → GitHub → Connect project**, authorize GitHub, choose your account or organization, and click **Create Repository**.
+---
+
+## Deployment and GitHub Sync
+
+This project is built and deployed through [Lovable](https://lovable.dev). When you make changes in the Lovable editor, they can be pushed to a connected GitHub repository, and the live website updates automatically.
+
+To connect GitHub:
+1. Open the Lovable editor.
+2. Click **+ → GitHub → Connect project**.
+3. Authorize GitHub and choose your personal account or organization.
+4. Click **Create Repository**.
+
+After that, your project will stay in sync with GitHub.
 
 ---
 
 ## License
 
-This project is generated for educational and demonstration purposes. The code is yours to modify and extend.
+This project is created for educational and demonstration purposes. You are free to modify and extend it for your own use.
 
 ---
 
