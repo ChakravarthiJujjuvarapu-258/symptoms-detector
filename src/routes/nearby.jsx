@@ -57,61 +57,49 @@ function NearbyPage() {
 
   const locate = useCallback(() => {
     setError("");
+    setLocationSource("gps");
     if (!("geolocation" in navigator)) {
-      setError("Location is not supported in this browser.");
+      setError("Location is not supported in this browser. Search your area below instead.");
       return;
     }
     setLoading(true);
-    let settled = false;
-    let watchId = null;
 
-    const clearWatch = () => {
-      if (watchId != null) navigator.geolocation.clearWatch(watchId);
-      watchId = null;
-    };
-
-    const finish = (pos) => {
-      setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-      setAccuracy(Math.round(pos.coords.accuracy));
+    let best = null;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      navigator.geolocation.clearWatch(watchId);
       setLoading(false);
+      if (!best) {
+        setError("Could not get your GPS position. Search your area below instead.");
+        return;
+      }
+      setCoords({ lat: best.coords.latitude, lng: best.coords.longitude });
+      const acc = Math.round(best.coords.accuracy);
+      setAccuracy(acc);
+      if (acc > 1000) {
+        setError("Your browser's location is very imprecise. Search your area below for accurate results.");
+      }
     };
 
-    // First get a fast fix...
-    navigator.geolocation.getCurrentPosition(
+    // Watch for up to 12s and keep only the most accurate fix — never trust the first rough guess.
+    const watchId = navigator.geolocation.watchPosition(
       (pos) => {
-        settled = true;
-        finish(pos);
-        // ...then keep refining with high-accuracy GPS for a better fix.
-        watchId = navigator.geolocation.watchPosition(
-          (better) => {
-            if (better.coords.accuracy <= pos.coords.accuracy) {
-              finish(better);
-              if (better.coords.accuracy <= 50) clearWatch();
-            }
-          },
-          () => {},
-          { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 }
-        );
-        // Stop refining after 20s regardless.
-        setTimeout(clearWatch, 20000);
+        if (!best || pos.coords.accuracy < best.coords.accuracy) best = pos;
+        if (best.coords.accuracy <= 50) finish();
       },
       () => {
-        if (settled) return;
-        // High-accuracy attempt failed — retry once with low accuracy (network/IP based).
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            settled = true;
-            finish(pos);
-          },
-          () => {
-            setLoading(false);
-            setError("Location permission denied. Allow location access to find nearby care.");
-          },
-          { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
-        );
+        if (best) finish();
+        else {
+          done = true;
+          setLoading(false);
+          setError("Location permission denied. Allow location access, or search your area below.");
+        }
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 12000 }
     );
+    setTimeout(finish, 12000);
   }, []);
 
   useEffect(() => {
