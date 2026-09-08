@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Activity, LogIn, LogOut, Moon, Sun } from "lucide-react";
+import { Activity, Camera, Clock3, Home, LogIn, LogOut, MapPin, Moon, Sparkles, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,50 +16,52 @@ function SiteHeader() {
     await supabase.auth.signOut();
     navigate({ to: "/auth", replace: true });
   };
-  return <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
-      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6">
+  return <header className="kinetic-sidebar">
+      <div className="kinetic-sidebar__inner">
         <Link
     to="/"
-    className="flex min-w-0 items-center gap-2.5"
+    className="kinetic-brand"
     aria-label="AI Symptoms Detector home"
   >
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl clinical-gradient text-primary-foreground">
+          <span className="kinetic-brand__mark">
             <Activity className="size-5" aria-hidden="true" />
           </span>
-          <span className="truncate text-base font-bold tracking-tight sm:text-lg">
-            AI Symptoms Detector
-          </span>
+          <span className="min-w-0"><strong>AI Symptoms</strong><small>Detector</small></span>
         </Link>
 
-        <nav className="flex items-center gap-1" aria-label="Main">
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+        <nav className="kinetic-nav" aria-label="Main">
+          <Button asChild variant="ghost" size="sm" className="kinetic-nav__item hidden lg:flex">
+            <Link to="/" activeProps={{ className: "kinetic-nav__active" }}><Home />Overview</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="kinetic-nav__item">
             <Link to="/assessment" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              Assessment
+              <Sparkles />Assessment
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+          <Button asChild variant="ghost" size="sm" className="kinetic-nav__item">
             <Link to="/image-analysis" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              Image analysis
+              <Camera />Image analysis
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+          <Button asChild variant="ghost" size="sm" className="kinetic-nav__item hidden sm:inline-flex">
             <Link to="/nearby" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              Nearby care
+              <MapPin />Nearby care
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="sm">
+          <Button asChild variant="ghost" size="sm" className="kinetic-nav__item hidden sm:inline-flex">
             <Link to="/history" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              History
+              <Clock3 />History
             </Link>
           </Button>
           {user ? <Button
     variant="ghost"
     size="sm"
+    className="kinetic-nav__item"
     onClick={signOut}
     title={user.email ?? user.phone ?? "Signed in"}
   >
               <LogOut className="size-4" aria-hidden="true" />
-              <span className="hidden sm:inline">Sign out</span>
+              <span className="hidden lg:inline">Sign out</span>
             </Button> : <Button asChild variant="ghost" size="sm">
               <Link to="/auth" activeProps={{ className: "bg-accent text-accent-foreground" }}>
                 <LogIn className="size-4" aria-hidden="true" />
@@ -71,11 +73,12 @@ function SiteHeader() {
     size="icon"
     onClick={toggle}
     aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-    className="min-h-11 min-w-11 rounded-xl"
+    className="kinetic-theme"
   >
             {theme === "dark" ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
           </Button>
         </nav>
+        <p className="kinetic-sidebar__note hidden lg:block">Educational guidance only. Your assessment history stays on this device.</p>
       </div>
     </header>;
 }

@@ -1,4 +1,5 @@
 # Roadmap
 
-- [ ] Redesign the application with a healthcare-minimal AI dashboard and restrained glassmorphism.
-- [ ] Add polished, accessible animations throughout the redesigned interface.
+- [x] Redesign the assessment, image analysis, and results experience with the Kinetic Elegance workspace.
+- [x] Add polished, accessible animations throughout the redesigned experience.
+- [ ] Finish manual area search controls for Nearby care (location correction follow-up).

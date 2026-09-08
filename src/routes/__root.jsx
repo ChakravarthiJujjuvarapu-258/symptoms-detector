@@ -14,6 +14,7 @@ import { Loader2 } from "lucide-react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
+import { HealthContextPanel } from "@/components/HealthContextPanel";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { Disclaimer } from "@/components/Disclaimer";
 import { Toaster } from "@/components/ui/sonner";
@@ -97,7 +98,7 @@ const Route = createRootRouteWithContext()({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
       },
       {
         rel: "stylesheet",
@@ -167,19 +168,21 @@ function RootComponent() {
         Skip to content
       </a>
       <AuthGate>
-        <SiteHeader />
-        <main id="main-content" className="min-h-[70dvh]">
-          {
-      /* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */
-    }
-          <Outlet />
-        </main>
-        <footer className="border-t border-border py-8">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <Disclaimer compact />
+        <div className="kinetic-shell">
+          <SiteHeader />
+          <div className="kinetic-center">
+            <main id="main-content" className="min-h-[70dvh]">
+              <Outlet />
+            </main>
+            <footer className="border-t border-border/60 py-7">
+              <div className="mx-auto max-w-6xl px-4 sm:px-6">
+                <Disclaimer compact />
+              </div>
+            </footer>
           </div>
-        </footer>
-        <ChatAssistant />
+          <HealthContextPanel />
+          <ChatAssistant />
+        </div>
       </AuthGate>
       <Toaster position="top-center" />
     </QueryClientProvider>;

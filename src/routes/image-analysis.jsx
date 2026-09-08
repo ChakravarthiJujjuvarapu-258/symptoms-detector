@@ -48,7 +48,7 @@ const STAGES = [
 
 const MATCH_STYLES = {
   High: "bg-destructive/10 text-destructive border-destructive/30",
-  Moderate: "bg-amber-500/10 text-amber-600 border-amber-500/30 dark:text-amber-400",
+  Moderate: "bg-gold/10 text-gold border-gold/30",
   Low: "bg-teal/10 text-teal border-teal/30",
 };
 
@@ -131,20 +131,20 @@ function ImageAnalysisPage() {
     result && !result.visible_features?.length && !result.possible_conditions?.length;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+    <div className="kinetic-page mx-auto w-full max-w-5xl px-4 py-7 sm:px-7 sm:py-10">
       <header className="animate-fade-up space-y-3">
-        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/60 px-3 py-1 text-xs font-medium text-muted-foreground">
+        <span className="eyebrow inline-flex items-center gap-2">
           <Sparkles className="size-3.5 text-teal" aria-hidden="true" />
           Educational visual analysis
         </span>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Symptom image analysis</h1>
+        <h1 className="display-title">See the visible pattern clearly.</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
           Upload a clear, well-lit photo of a visible symptom. The assistant describes what can be
           seen and lists conditions that can look similar. It cannot diagnose.
         </p>
       </header>
 
-      <Card className="mt-6 overflow-hidden rounded-2xl">
+      <Card className="kinetic-panel mt-6 overflow-hidden">
         <CardContent className="p-4 sm:p-6">
           <input
             ref={inputRef}
@@ -163,34 +163,36 @@ function ImageAnalysisPage() {
               }}
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
-              className={`flex flex-col items-center gap-4 rounded-2xl border-2 border-dashed px-6 py-10 text-center transition-colors ${
-                dragging ? "border-teal bg-teal/5" : "border-border bg-muted/30"
+               className={`kinetic-dropzone ${
+                 dragging ? "kinetic-dropzone--active" : ""
               }`}
             >
-              <span className="grid size-14 place-items-center rounded-2xl clinical-gradient text-primary-foreground">
+               <span className="kinetic-upload-icon">
                 <ImageUp className="size-7" aria-hidden="true" />
               </span>
               <div className="space-y-1">
                 <p className="text-base font-semibold">Drag and drop your photo here</p>
                 <p className="text-xs text-muted-foreground">JPG, JPEG, PNG or WEBP &middot; up to 8 MB</p>
               </div>
-              <Button size="lg" className="min-h-11 rounded-xl" onClick={() => inputRef.current?.click()}>
+               <Button size="lg" className="kinetic-button kinetic-button--gold min-h-11" onClick={() => inputRef.current?.click()}>
                 <Upload className="size-4" aria-hidden="true" />
                 Upload Symptom Image
               </Button>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-[minmax(0,260px)_minmax(0,1fr)] sm:items-start">
-              <figure className="relative overflow-hidden rounded-2xl border border-border bg-muted">
+              <figure className="kinetic-image-frame relative overflow-hidden">
                 <img src={preview} alt="Your uploaded symptom photo" className="aspect-square w-full object-cover" />
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="icon"
                   onClick={removeImage}
                   aria-label="Remove uploaded image"
-                  className="absolute right-2 top-2 grid size-9 place-items-center rounded-full bg-background/90 text-foreground shadow"
+                  className="absolute right-2 top-2 rounded-full"
                 >
                   <X className="size-4" aria-hidden="true" />
-                </button>
+                </Button>
               </figure>
               <div className="space-y-3">
                 <p className="text-sm font-medium">{file?.name}</p>
@@ -198,7 +200,7 @@ function ImageAnalysisPage() {
                   {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : ""}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Button onClick={analyze} disabled={loading} className="min-h-11 rounded-xl">
+                   <Button onClick={analyze} disabled={loading} className="kinetic-button min-h-11">
                     {loading ? (
                       <Loader2 className="size-4 animate-spin" aria-hidden="true" />
                     ) : (
@@ -247,9 +249,9 @@ function ImageAnalysisPage() {
           ) : null}
 
           {loading ? (
-            <div className="mt-6 flex items-center gap-4 rounded-2xl border border-border bg-muted/40 p-4" aria-live="polite">
+             <div className="kinetic-scan mt-6 flex items-center gap-4 p-4" aria-live="polite">
               <span className="relative grid size-11 shrink-0 place-items-center rounded-full clinical-gradient text-primary-foreground">
-                <span className="absolute inset-0 animate-pulse-ring rounded-full bg-teal/40" aria-hidden="true" />
+                 <span className="absolute inset-0 animate-pulse-ring rounded-full bg-primary/30" aria-hidden="true" />
                 <Camera className="size-5" aria-hidden="true" />
               </span>
               <div className="min-w-0">
@@ -267,12 +269,12 @@ function ImageAnalysisPage() {
       </Card>
 
       {result ? (
-        <section className="mt-8 animate-fade-up space-y-6" aria-label="Image analysis results">
+         <section className="mt-8 animate-kinetic-enter space-y-6" aria-label="Image analysis results">
           {insufficient ? (
-            <Card className="rounded-2xl border-amber-500/40">
+            <Card className="kinetic-panel border-gold/40">
               <CardContent className="space-y-2 p-5">
                 <h2 className="flex items-center gap-2 text-lg font-semibold">
-                  <AlertTriangle className="size-5 text-amber-500" aria-hidden="true" />
+                  <AlertTriangle className="size-5 text-gold" aria-hidden="true" />
                   Image quality is insufficient
                 </h2>
                 <p className="text-sm text-muted-foreground">{result.explanation}</p>
@@ -281,7 +283,7 @@ function ImageAnalysisPage() {
             </Card>
           ) : (
             <>
-              <Card className="rounded-2xl">
+              <Card className="kinetic-panel">
                 <CardContent className="p-5">
                   <h2 className="text-lg font-semibold">Visible features</h2>
                   <p className="mt-1 text-xs text-muted-foreground">
@@ -289,7 +291,7 @@ function ImageAnalysisPage() {
                   </p>
                   <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                     {result.visible_features.map((f) => (
-                      <li key={f.label} className="rounded-xl border border-border bg-muted/40 p-3">
+                      <li key={f.label} className="glass-inset p-3">
                         <p className="text-sm font-medium">{f.label}</p>
                         {f.detail ? (
                           <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{f.detail}</p>
@@ -309,7 +311,7 @@ function ImageAnalysisPage() {
                     explanation: c.why,
                   });
                   return (
-                    <Card key={c.name} className="overflow-hidden rounded-2xl">
+                    <Card key={c.name} className="kinetic-panel animate-kinetic-enter overflow-hidden">
                       <CardContent className="grid gap-4 p-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,200px)]">
                         <div className="space-y-3">
                           <div className="flex flex-wrap items-center gap-2">
@@ -380,7 +382,7 @@ function ImageAnalysisPage() {
                 })}
               </div>
 
-              <Card className="rounded-2xl">
+              <Card className="kinetic-panel">
                 <CardContent className="space-y-3 p-5">
                   <h2 className="text-lg font-semibold">Explanation</h2>
                   <p className="text-sm leading-relaxed text-muted-foreground">{result.explanation}</p>
@@ -400,9 +402,9 @@ function ImageAnalysisPage() {
       <div className="mt-8 space-y-4">
         <aside
           aria-label="Image analysis disclaimer"
-          className="flex gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-foreground"
+          className="flex gap-3 rounded-lg border border-gold/40 bg-gold/10 p-4 text-sm text-foreground"
         >
-          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden="true" />
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden="true" />
           <p className="leading-relaxed">
             AI image analysis is for educational purposes only. It cannot diagnose medical
             conditions. Images of similar symptoms can have different causes. Consult a qualified

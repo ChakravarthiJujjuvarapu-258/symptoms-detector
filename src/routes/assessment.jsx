@@ -23,14 +23,15 @@ const Route = createFileRoute("/assessment")({
 });
 function AssessmentPage() {
   const [result, setResult] = useState(null);
-  return <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+  return <div className="kinetic-page mx-auto max-w-5xl px-4 py-7 sm:px-7 sm:py-10">
       {result ? <Suspense
     fallback={<p className="py-20 text-center text-muted-foreground">Loading results…</p>}
   >
           <ResultsDashboard result={result} onRestart={() => setResult(null)} />
         </Suspense> : <>
-          <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Symptom assessment</h1>
-          <p className="mt-1.5 text-sm text-muted-foreground">
+          <p className="eyebrow animate-fade-in">Guided health assessment</p>
+          <h1 className="display-title animate-fade-up mt-2">Tell us what feels different.</h1>
+          <p className="animate-fade-up mt-2 max-w-xl text-sm text-muted-foreground" style={{ animationDelay: "70ms" }}>
             Four short steps. Everything stays on this device.
           </p>
           <div className="mt-6">
