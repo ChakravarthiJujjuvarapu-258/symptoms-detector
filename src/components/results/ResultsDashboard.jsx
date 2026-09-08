@@ -37,12 +37,12 @@ function SectionCard({
   delay = 0
 }) {
   return <Card
-    className="animate-fade-up rounded-3xl surface-panel"
+    className="kinetic-panel animate-kinetic-enter"
     style={{ animationDelay: `${delay}ms` }}
   >
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <Icon className="size-4 text-teal" aria-hidden="true" />
+        <CardTitle className="section-title flex items-center gap-2 text-lg">
+          <span className="kinetic-icon"><Icon className="size-4" aria-hidden="true" /></span>
           {title}
         </CardTitle>
       </CardHeader>
@@ -70,9 +70,10 @@ function ResultsDashboard({
   return <div className="space-y-5">
       {result.emergency && <EmergencyBanner />}
 
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
+      <div className="results-heading animate-fade-up grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
         <div className="min-w-0">
-          <h1 className="truncate text-xl font-extrabold tracking-tight sm:text-2xl">
+          <p className="eyebrow">AI assessment complete</p>
+          <h1 className="display-title mt-1 truncate">
             Your assessment results
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -83,13 +84,13 @@ function ResultsDashboard({
           <DiscussWithDoctor result={result} />
           <Button
     variant="outline"
-    className="rounded-xl"
+    className="rounded-lg"
     onClick={() => exportAssessmentPdf(result)}
   >
             <Download className="size-4" aria-hidden="true" />
             <span className="hidden sm:inline">Export PDF</span>
           </Button>
-          <Button variant="secondary" className="rounded-xl" onClick={onRestart}>
+          <Button variant="secondary" className="rounded-lg" onClick={onRestart}>
             <RotateCcw className="size-4" aria-hidden="true" />
             <span className="hidden sm:inline">New check</span>
           </Button>
@@ -124,7 +125,7 @@ function ResultsDashboard({
         </p>
         {result.conditions.map((c) => {
           const visual = conditionVisual(c);
-          return <div key={c.name} className="rounded-2xl border border-border bg-surface/60 p-4">
+          return <div key={c.name} className="condition-row p-4">
             <div className="grid gap-4 sm:grid-cols-[200px_minmax(0,1fr)]">
               <img
     src={visual.image}
@@ -132,12 +133,12 @@ function ResultsDashboard({
     loading="lazy"
     width={768}
     height={512}
-    className="h-32 w-full rounded-xl border border-border object-cover sm:h-full"
+    className="h-32 w-full rounded-lg border border-border object-cover sm:h-full"
   />
               <div className="min-w-0">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
               <h3 className="min-w-0 font-semibold">{c.name}</h3>
-              <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+              <span className="match-pill">
                 {c.confidence}% match
               </span>
             </div>
@@ -170,7 +171,7 @@ function ResultsDashboard({
             </dl>
 
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl border border-border bg-background/60 p-3">
+                <div className="glass-inset p-3">
                 <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   <Pill className="size-3.5 text-teal" aria-hidden="true" />
                   Medicines commonly used
@@ -192,7 +193,7 @@ function ResultsDashboard({
                 </p>
               </div>
 
-              <div className="rounded-xl border border-border bg-background/60 p-3">
+                <div className="glass-inset p-3">
                 <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   <UserRound className="size-3.5 text-teal" aria-hidden="true" />
                   Doctor to consult
@@ -237,7 +238,7 @@ function ResultsDashboard({
             articles.
           </p>
           <ul className="space-y-3">
-            {result.sources.map((ref) => <li key={ref.url} className="rounded-xl border border-border bg-surface/60 p-3">
+            {result.sources.map((ref) => <li key={ref.url} className="glass-inset p-3">
                 <a
     href={ref.url}
     target="_blank"
@@ -267,7 +268,7 @@ function ResultsDashboard({
           <ul className="flex flex-wrap gap-2">
             {result.tests.map((t) => <li
     key={t}
-    className="rounded-xl border border-border bg-surface/60 px-3 py-1.5 text-sm font-medium"
+    className="glass-inset px-3 py-1.5 text-sm font-medium"
   >
                 {t}
               </li>)}

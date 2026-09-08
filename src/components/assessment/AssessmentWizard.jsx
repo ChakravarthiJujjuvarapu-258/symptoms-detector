@@ -104,9 +104,9 @@ function AssessmentWizard({ onComplete }) {
   };
 
   if (analyzing) {
-    return <Card className="rounded-3xl surface-panel">
+    return <Card className="kinetic-panel kinetic-analyzing overflow-hidden">
         <CardContent className="flex flex-col items-center gap-4 py-20 text-center">
-          <span className="grid size-16 place-items-center rounded-full clinical-gradient text-primary-foreground animate-pulse-ring">
+          <span className="kinetic-orbit animate-pulse-ring">
             <Loader2 className="size-7 animate-spin" aria-hidden="true" />
           </span>
           <p className="text-lg font-semibold" role="status" aria-live="polite">
@@ -120,14 +120,14 @@ function AssessmentWizard({ onComplete }) {
       </Card>;
   }
   return <div className="space-y-5">
-      <ol className="grid grid-cols-4 gap-2" aria-label="Assessment progress">
+      <ol className="kinetic-progress" aria-label="Assessment progress">
         {STEPS.map((label, i) => <li key={label} className="min-w-0">
             <div
-    className={`h-1.5 rounded-full transition-colors ${i <= step ? "bg-primary" : "bg-muted"}`}
+    className={`kinetic-progress__line ${i <= step ? "kinetic-progress__line--active" : ""}`}
     aria-hidden="true"
   />
             <p
-    className={`mt-2 truncate text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}
+    className={`mt-2 truncate text-xs font-medium ${i === step ? "text-gold" : "text-muted-foreground"}`}
     aria-current={i === step ? "step" : void 0}
   >
               {i + 1}. {label}
@@ -135,10 +135,10 @@ function AssessmentWizard({ onComplete }) {
           </li>)}
       </ol>
 
-      <Card className="animate-fade-up rounded-3xl surface-panel" key={step}>
-        <CardContent className="space-y-5 py-6">
+      <Card className="kinetic-panel animate-kinetic-enter" key={step}>
+        <CardContent className="space-y-6 p-5 sm:p-7">
           {step === 0 && <fieldset className="space-y-5">
-              <legend className="text-lg font-bold">Tell us about you</legend>
+              <legend className="section-title">Tell us about you</legend>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <Label htmlFor="age">Age</Label>
@@ -151,7 +151,7 @@ function AssessmentWizard({ onComplete }) {
     value={profile.age}
     onChange={(e) => setProfile({ ...profile, age: e.target.value })}
     placeholder="e.g. 34"
-    className="rounded-xl"
+    className="kinetic-input"
   />
                 </div>
                 <div className="space-y-1.5">
@@ -160,7 +160,7 @@ function AssessmentWizard({ onComplete }) {
     value={profile.gender}
     onValueChange={(v) => setProfile({ ...profile, gender: v })}
   >
-                    <SelectTrigger id="gender" className="w-full rounded-xl">
+                    <SelectTrigger id="gender" className="kinetic-input w-full">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -179,7 +179,7 @@ function AssessmentWizard({ onComplete }) {
     value={profile.heightCm}
     onChange={(e) => setProfile({ ...profile, heightCm: e.target.value })}
     placeholder="e.g. 172"
-    className="rounded-xl"
+    className="kinetic-input"
   />
                 </div>
                 <div className="space-y-1.5">
@@ -191,14 +191,14 @@ function AssessmentWizard({ onComplete }) {
     value={profile.weightKg}
     onChange={(e) => setProfile({ ...profile, weightKg: e.target.value })}
     placeholder="e.g. 68"
-    className="rounded-xl"
+    className="kinetic-input"
   />
                 </div>
               </div>
             </fieldset>}
 
           {step === 1 && <fieldset className="space-y-4">
-              <legend className="text-lg font-bold">Medical history</legend>
+              <legend className="section-title">Medical history</legend>
               <p className="text-sm text-muted-foreground">
                 Select any conditions that apply to you.
               </p>
@@ -206,7 +206,7 @@ function AssessmentWizard({ onComplete }) {
                 {MEDICAL_HISTORY_OPTIONS.map((option) => <label
     key={option}
     htmlFor={`hist-${option}`}
-    className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface/50 px-3 py-2.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+    className="kinetic-choice"
   >
                     <Checkbox
     id={`hist-${option}`}
@@ -220,7 +220,7 @@ function AssessmentWizard({ onComplete }) {
 
           {step === 2 && <div className="space-y-4">
               <div>
-                <Label htmlFor="symptoms" className="text-lg font-bold">
+                <Label htmlFor="symptoms" className="section-title">
                   Describe your symptoms
                 </Label>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -232,14 +232,14 @@ function AssessmentWizard({ onComplete }) {
     value={symptoms}
     onChange={(e) => setSymptoms(e.target.value)}
     rows={8}
-    className="rounded-2xl text-base"
+    className="kinetic-input min-h-52 text-base"
     placeholder="Example: I have had a fever for 3 days with sore throat, headache, cough, and fatigue."
   />
               {emergencyHit && <EmergencyBanner />}
             </div>}
 
           {step === 3 && <div className="space-y-6">
-              <h2 className="text-lg font-bold">A few more details</h2>
+              <h2 className="section-title">A few more details</h2>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <Label htmlFor="duration">How long have you had these symptoms?</Label>
@@ -247,7 +247,7 @@ function AssessmentWizard({ onComplete }) {
     value={extras.duration}
     onValueChange={(v) => setExtras({ ...extras, duration: v })}
   >
-                    <SelectTrigger id="duration" className="w-full rounded-xl">
+                    <SelectTrigger id="duration" className="kinetic-input w-full">
                       <SelectValue placeholder="Select duration" />
                     </SelectTrigger>
                     <SelectContent>
@@ -265,7 +265,7 @@ function AssessmentWizard({ onComplete }) {
     onChange={(e) => setExtras({ ...extras, temperature: e.target.value })}
     placeholder="e.g. 38.5"
     inputMode="decimal"
-    className="rounded-xl"
+    className="kinetic-input"
   />
                 </div>
               </div>
@@ -286,7 +286,7 @@ function AssessmentWizard({ onComplete }) {
               <div className="grid gap-2 sm:grid-cols-2">
                 {YES_NO.map(({ key, label }) => <div
     key={key}
-    className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-border bg-surface/50 px-3 py-2.5"
+    className="kinetic-choice justify-between"
   >
                     <Label htmlFor={`sw-${key}`} className="text-sm font-normal">
                       {label}
@@ -303,7 +303,7 @@ function AssessmentWizard({ onComplete }) {
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
             <Button
     variant="ghost"
-    className="rounded-xl"
+    className="rounded-lg"
     onClick={() => setStep((s) => Math.max(0, s - 1))}
     disabled={step === 0}
   >
@@ -312,14 +312,14 @@ function AssessmentWizard({ onComplete }) {
             </Button>
 
             {step < 3 ? <Button
-    className="rounded-xl"
+    className="kinetic-button"
     onClick={() => setStep((s) => s + 1)}
     disabled={!canContinue}
   >
                 Continue
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Button> : <Button
-    className="rounded-xl clinical-gradient text-primary-foreground"
+    className="kinetic-button kinetic-button--gold"
     onClick={runAnalysis}
   >
                 <Sparkle className="size-4" aria-hidden="true" />
@@ -334,7 +334,7 @@ function AssessmentWizard({ onComplete }) {
         </CardContent>
       </Card>
 
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+      <div className="glass-strip flex items-center gap-2 text-xs text-muted-foreground">
         <Stethoscope className="size-3.5 text-teal" aria-hidden="true" />
         Nothing you enter leaves your device — assessments are stored locally.
       </div>
