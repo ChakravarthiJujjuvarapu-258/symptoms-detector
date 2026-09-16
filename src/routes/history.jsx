@@ -20,7 +20,9 @@ const Route = createFileRoute("/history")({
       {
         property: "og:description",
         content: "Your past symptom checks with dates, risk levels and possible conditions."
-      }
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" }
     ]
   }),
   component: HistoryPage
@@ -38,8 +40,9 @@ function HistoryPage() {
       (r) => r.input.symptoms.toLowerCase().includes(q) || r.risk.includes(q) || r.conditions.some((c) => c.name.toLowerCase().includes(q))
     );
   }, [records, query]);
-  return <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
-      <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Assessment history</h1>
+  return <div className="kinetic-page mx-auto max-w-5xl px-4 py-8 sm:px-7 sm:py-12">
+      <p className="eyebrow">Private health archive</p>
+      <h1 className="display-title mt-2">Assessment history</h1>
       <p className="mt-1.5 text-sm text-muted-foreground">
         Stored locally on this device only. {records.length} saved{" "}
         {records.length === 1 ? "record" : "records"}.
@@ -58,24 +61,24 @@ function HistoryPage() {
     value={query}
     onChange={(e) => setQuery(e.target.value)}
     placeholder="Search symptoms, conditions or risk level"
-    className="rounded-2xl pl-9"
+    className="kinetic-input pl-9"
   />
       </div>
 
-      {filtered.length === 0 ? <Card className="mt-6 rounded-3xl surface-panel">
+      {filtered.length === 0 ? <Card className="kinetic-panel mt-6">
           <CardContent className="py-16 text-center">
             <p className="font-semibold">No assessments found</p>
             <p className="mt-1 text-sm text-muted-foreground">
               {records.length === 0 ? "Run your first symptom check to build your history." : "Try a different search term."}
             </p>
-            <Button asChild className="mt-5 rounded-xl">
+              <Button asChild className="kinetic-button mt-5">
               <Link to="/assessment">Start assessment</Link>
             </Button>
           </CardContent>
         </Card> : <ul className="mt-6 space-y-4">
           {filtered.map((r, i) => <li key={r.id}>
               <Card
-    className="animate-fade-up rounded-3xl surface-panel"
+    className="kinetic-panel animate-kinetic-enter"
     style={{ animationDelay: `${i * 50}ms` }}
   >
                 <CardContent className="space-y-3 py-5">

@@ -25,7 +25,9 @@ const Route = createFileRoute("/auth")({
       {
         property: "og:description",
         content: "Sign in with Google, email or mobile number to keep your assessment history."
-      }
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" }
     ]
   }),
   component: AuthPage
@@ -223,18 +225,19 @@ function AuthPage() {
 
 
   return (
-    <div className="mx-auto flex max-w-md flex-col px-4 py-10 sm:py-16">
+    <div className="kinetic-page mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4 py-10 sm:py-16">
       <div className="mb-6 text-center">
-        <span className="mx-auto grid size-12 place-items-center rounded-2xl clinical-gradient text-primary-foreground">
+        <span className="kinetic-orbit mx-auto">
           <Activity className="size-6" aria-hidden="true" />
         </span>
-        <h1 className="mt-4 text-2xl font-extrabold tracking-tight">Sign in to your account</h1>
+        <p className="eyebrow mt-5">Secure clinical workspace</p>
+        <h1 className="display-title mt-2">Welcome back.</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
           Keep your assessments and history across devices.
         </p>
       </div>
 
-      <Card className="rounded-3xl surface-panel">
+      <Card className="kinetic-panel">
         <CardHeader className="pb-3">
           <CardTitle className="text-base">Welcome</CardTitle>
           <CardDescription>Choose how you'd like to continue.</CardDescription>
@@ -242,7 +245,7 @@ function AuthPage() {
         <CardContent className="space-y-5">
           <Button
             variant="outline"
-            className="w-full rounded-xl"
+            className="kinetic-button w-full"
             onClick={signInWithGoogle}
             disabled={busy !== ""}
           >
@@ -283,7 +286,7 @@ function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="rounded-xl"
+                    className="kinetic-input"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -295,10 +298,10 @@ function AuthPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 8 characters"
-                    className="rounded-xl"
+                    className="kinetic-input"
                   />
                 </div>
-                <Button type="submit" className="w-full rounded-xl" disabled={busy !== ""}>
+                <Button type="submit" className="kinetic-button kinetic-button--gold w-full" disabled={busy !== ""}>
                   {busy === "email" && (
                     <Loader2 className="size-4 animate-spin" aria-hidden="true" />
                   )}
@@ -334,7 +337,7 @@ function AuthPage() {
                       placeholder="123456"
                       disabled={codeExpired}
                       aria-invalid={otpError !== ""}
-                      className="rounded-xl tracking-[0.4em]"
+                      className="kinetic-input tracking-[0.4em]"
                     />
                     <p className="text-xs text-muted-foreground">Sent to {phone}</p>
                   </div>
@@ -360,7 +363,7 @@ function AuthPage() {
 
                   <Button
                     type="submit"
-                    className="w-full rounded-xl"
+                    className="kinetic-button kinetic-button--gold w-full"
                     disabled={busy !== "" || codeExpired}
                   >
                     {busy === "otp-verify" && (
@@ -372,7 +375,7 @@ function AuthPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full rounded-xl"
+                    className="kinetic-button w-full"
                     disabled={busy !== "" || resendIn > 0}
                     onClick={() => requestOtp(true)}
                   >
@@ -408,7 +411,7 @@ function AuthPage() {
                       }}
                       placeholder="+14155550123"
                       aria-invalid={otpError !== ""}
-                      className="rounded-xl"
+                      className="kinetic-input"
                     />
                     <p className="text-xs text-muted-foreground">
                       Include your country code. We'll text you a one-time code.
@@ -420,7 +423,7 @@ function AuthPage() {
                     )}
                   </div>
 
-                  <Button type="submit" className="w-full rounded-xl" disabled={busy !== ""}>
+                  <Button type="submit" className="kinetic-button kinetic-button--gold w-full" disabled={busy !== ""}>
                     {busy === "otp-send" && (
                       <Loader2 className="size-4 animate-spin" aria-hidden="true" />
                     )}
