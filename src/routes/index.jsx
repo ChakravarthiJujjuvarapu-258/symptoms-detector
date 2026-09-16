@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Activity, Brain, ClipboardList, HeartPulse, Lock, ShieldCheck } from "lucide-react";
+import { Activity, ArrowRight, Brain, Camera, ClipboardList, HeartPulse, Lock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Disclaimer } from "@/components/Disclaimer";
 const Route = createFileRoute("/")({
@@ -14,7 +14,9 @@ const Route = createFileRoute("/")({
       {
         property: "og:description",
         content: "Describe your symptoms and receive AI-powered health insights, risk levels and recommendations."
-      }
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" }
     ]
   }),
   component: Landing
@@ -42,54 +44,58 @@ const FEATURES = [
   }
 ];
 function Landing() {
-  return <div>
-      <section className="grid-backdrop">
-        <div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
-          <span className="animate-fade-in inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-xs font-semibold text-muted-foreground">
+  return <div className="kinetic-page mx-auto max-w-6xl px-4 py-8 sm:px-7 sm:py-12">
+      <section className="relative overflow-hidden border-b border-border pb-10 pt-5 sm:pb-14 sm:pt-10">
+        <div className="relative max-w-3xl">
+          <span className="animate-fade-in inline-flex items-center gap-2 border-l-2 border-gold pl-3 text-xs font-semibold text-muted-foreground">
             <ShieldCheck className="size-3.5 text-teal" aria-hidden="true" />
-            Educational health insights, never a diagnosis
+            Private, educational health guidance
           </span>
-          <h1 className="animate-fade-up mt-6 text-4xl font-extrabold tracking-tight sm:text-6xl">
-            AI Symptoms Detector
+          <h1 className="display-title animate-fade-up mt-7 max-w-2xl">
+            Clarity for the moments when your health feels uncertain.
           </h1>
           <p
     className="animate-fade-up mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg"
     style={{ animationDelay: "80ms" }}
   >
-            Describe your symptoms and receive AI-powered health insights.
+            Describe what feels different and receive a structured, safety-aware overview to help you decide what to do next.
           </p>
           <div
-    className="animate-fade-up mt-8 flex flex-wrap justify-center gap-3"
+    className="animate-fade-up mt-8 flex flex-wrap gap-3"
     style={{ animationDelay: "160ms" }}
   >
             <Button
     asChild
     size="lg"
-    className="min-h-12 rounded-2xl clinical-gradient px-8 text-base text-primary-foreground hover:opacity-95"
+    className="kinetic-button kinetic-button--gold min-h-12 px-7 text-base"
   >
               <Link to="/assessment">
                 <Activity className="size-5" aria-hidden="true" />
                 Start Assessment
+                <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="kinetic-button min-h-12 px-7 text-base">
+              <Link to="/image-analysis"><Camera className="size-5" aria-hidden="true" />Analyze an image</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6" aria-labelledby="features-heading">
+      <section className="py-10 sm:py-14" aria-labelledby="features-heading">
         <h2 id="features-heading" className="sr-only">
           What the assessment gives you
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f, i) => <article
     key={f.title}
-    className="animate-fade-up rounded-3xl surface-panel p-5 transition-transform duration-300 hover:-translate-y-1"
+    className="animate-fade-up bg-card p-5 transition-colors duration-300 hover:bg-accent/40"
     style={{ animationDelay: `${i * 70}ms` }}
   >
-              <span className="grid size-10 place-items-center rounded-2xl bg-accent text-accent-foreground">
+              <span className="kinetic-icon">
                 <f.icon className="size-5" aria-hidden="true" />
               </span>
-              <h3 className="mt-4 font-bold">{f.title}</h3>
+              <h3 className="section-title mt-4 text-lg">{f.title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{f.text}</p>
             </article>)}
         </div>
