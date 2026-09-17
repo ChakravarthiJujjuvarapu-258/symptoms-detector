@@ -31,26 +31,26 @@ function SiteHeader() {
 
         <nav className="kinetic-nav" aria-label="Main">
           <Button asChild variant="ghost" size="sm" className="kinetic-nav__item hidden lg:flex">
-            <Link to="/" activeProps={{ className: "kinetic-nav__active" }}><Home />Overview</Link>
+            <Link to="/" activeProps={{ className: "kinetic-nav__active" }}><Home /><span>Overview</span></Link>
           </Button>
           <Button asChild variant="ghost" size="sm" className="kinetic-nav__item">
             <Link to="/assessment" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              <Sparkles />Assessment
+              <Sparkles /><span>Assessment</span>
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm" className="kinetic-nav__item">
             <Link to="/image-analysis" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              <Camera />Image analysis
+              <Camera /><span>Image analysis</span>
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm" className="kinetic-nav__item hidden sm:inline-flex">
             <Link to="/nearby" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              <MapPin />Nearby care
+              <MapPin /><span>Nearby care</span>
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm" className="kinetic-nav__item hidden sm:inline-flex">
             <Link to="/history" activeProps={{ className: "bg-accent text-accent-foreground" }}>
-              <Clock3 />History
+              <Clock3 /><span>History</span>
             </Link>
           </Button>
           {user ? <Button

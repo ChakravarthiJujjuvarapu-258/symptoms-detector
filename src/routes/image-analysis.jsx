@@ -210,7 +210,7 @@ function ImageAnalysisPage() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="min-h-11 rounded-xl"
+                   className="min-h-11 rounded-lg"
                     onClick={() => inputRef.current?.click()}
                     disabled={loading}
                   >
@@ -219,7 +219,7 @@ function ImageAnalysisPage() {
                   </Button>
                   <Button
                     variant="ghost"
-                    className="min-h-11 rounded-xl"
+                     className="min-h-11 rounded-lg"
                     onClick={removeImage}
                     disabled={loading}
                   >
@@ -229,7 +229,7 @@ function ImageAnalysisPage() {
                   {result ? (
                     <Button
                       variant="ghost"
-                      className="min-h-11 rounded-xl"
+                       className="min-h-11 rounded-lg"
                       onClick={() => setResult(null)}
                       disabled={loading}
                     >
@@ -242,7 +242,7 @@ function ImageAnalysisPage() {
           )}
 
           {error ? (
-            <p role="alert" className="mt-4 flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+             <p role="alert" className="mt-4 flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
               <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               {error}
             </p>
@@ -285,7 +285,7 @@ function ImageAnalysisPage() {
             <>
               <Card className="kinetic-panel">
                 <CardContent className="p-5">
-                  <h2 className="text-lg font-semibold">Visible features</h2>
+                   <h2 className="section-title text-xl">Visible features</h2>
                   <p className="mt-1 text-xs text-muted-foreground">
                     What can be seen in the photo &mdash; visual description only.
                   </p>
@@ -303,7 +303,7 @@ function ImageAnalysisPage() {
               </Card>
 
               <div className="space-y-4">
-                <h2 className="text-lg font-semibold">Possible look-alike conditions</h2>
+                 <h2 className="section-title text-xl">Possible look-alike conditions</h2>
                 {result.possible_conditions.map((c) => {
                   const visual = conditionVisual({
                     name: c.name,
@@ -317,7 +317,7 @@ function ImageAnalysisPage() {
                           <div className="flex flex-wrap items-center gap-2">
                             <h3 className="text-base font-semibold">{c.name}</h3>
                             <span
-                              className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${MATCH_STYLES[c.match]}`}
+                               className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${MATCH_STYLES[c.match] || MATCH_STYLES.Low}`}
                             >
                               Match: {c.match}
                             </span>
@@ -366,7 +366,7 @@ function ImageAnalysisPage() {
                             src={visual.image}
                             alt={visual.alt}
                             loading="lazy"
-                            className="w-full rounded-xl border border-border object-cover"
+                             className="w-full rounded-lg border border-border object-cover"
                           />
                           <figcaption className="text-[11px] leading-snug text-muted-foreground">
                             Educational reference image &mdash; not a diagnosis.
@@ -384,7 +384,7 @@ function ImageAnalysisPage() {
 
               <Card className="kinetic-panel">
                 <CardContent className="space-y-3 p-5">
-                  <h2 className="text-lg font-semibold">Explanation</h2>
+                   <h2 className="section-title text-xl">Explanation</h2>
                   <p className="text-sm leading-relaxed text-muted-foreground">{result.explanation}</p>
                   <h3 className="text-sm font-semibold">Recommendation</h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">{result.recommendation}</p>
@@ -413,7 +413,7 @@ function ImageAnalysisPage() {
         </aside>
         <aside
           aria-label="Privacy notice"
-          className="flex gap-3 rounded-2xl border border-border bg-muted/60 p-4 text-sm text-muted-foreground"
+           className="glass-inset flex gap-3 p-4 text-sm text-muted-foreground"
         >
           <Lock className="mt-0.5 size-4 shrink-0 text-teal" aria-hidden="true" />
           <p className="leading-relaxed">
