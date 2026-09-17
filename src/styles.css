@@ -306,21 +306,56 @@
 @utility kinetic-button {
   border-radius: 0.5rem;
   box-shadow: 0 10px 28px -16px color-mix(in oklab, var(--primary) 70%, transparent);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  &:hover { transform: translateY(-1px); box-shadow: 0 14px 32px -16px color-mix(in oklab, var(--primary) 78%, transparent); }
+  &:active { transform: translateY(0); }
+}
+
+@utility kinetic-button--gold {
+  border-color: color-mix(in oklab, var(--gold) 72%, transparent);
+  background: var(--gold);
+  color: var(--gold-foreground);
+  box-shadow: 0 12px 30px -16px color-mix(in oklab, var(--gold) 80%, transparent);
+  &:hover { background: color-mix(in oklab, var(--gold) 88%, var(--foreground)); }
 }
 
 @utility kinetic-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   min-height: 3.25rem;
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   background: color-mix(in oklab, var(--card) 70%, transparent);
+  padding: 0.75rem 0.9rem;
+  cursor: pointer;
   transition: border-color 180ms ease, transform 180ms ease, background 180ms ease;
   &:hover { border-color: var(--gold); transform: translateY(-1px); }
+  &:has([data-state="checked"]) {
+    border-color: color-mix(in oklab, var(--gold) 65%, var(--border));
+    background: color-mix(in oklab, var(--gold) 9%, var(--card));
+  }
 }
 
 @utility kinetic-dropzone {
+  display: flex;
+  min-height: 22rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
   border: 1px dashed color-mix(in oklab, var(--primary) 55%, var(--gold));
   border-radius: 0.75rem;
   background: color-mix(in oklab, var(--primary) 6%, transparent);
+  padding: 2rem;
+  text-align: center;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+@utility kinetic-dropzone--active {
+  border-color: var(--gold);
+  background: color-mix(in oklab, var(--gold) 10%, transparent);
+  transform: scale(0.995);
 }
 
 @utility kinetic-image-frame {
@@ -376,6 +411,23 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.5rem;
+}
+
+@utility kinetic-progress__line {
+  height: 0.2rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background 240ms ease, box-shadow 240ms ease;
+}
+
+@utility kinetic-progress__line--active {
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+  box-shadow: 0 0 18px color-mix(in oklab, var(--gold) 30%, transparent);
+}
+
+@utility kinetic-analyzing {
+  background-image: linear-gradient(120deg, color-mix(in oklab, var(--primary) 7%, transparent), color-mix(in oklab, var(--gold) 7%, transparent));
 }
 
 @layer base {
@@ -442,6 +494,9 @@
 .context-rail__urgent { display: flex; gap: 0.7rem; border-left: 2px solid var(--destructive); padding: 0.7rem; background: color-mix(in oklab, var(--destructive) 6%, transparent); }
 .context-rail__urgent strong { font-size: 0.75rem; }
 .context-rail__urgent p { margin-top: 0.2rem; color: var(--muted-foreground); font-size: 0.68rem; line-height: 1.45; }
+.results-heading { border-bottom: 1px solid var(--border); padding-bottom: 1.25rem; }
+.condition-row { transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.condition-row:hover { border-color: color-mix(in oklab, var(--gold) 35%, var(--border)); transform: translateY(-2px); box-shadow: 0 18px 38px -30px color-mix(in oklab, var(--gold) 55%, transparent); }
 
 @media (min-width: 1280px) {
   .kinetic-shell { display: grid; grid-template-columns: 15rem minmax(0, 1fr) 17rem; }

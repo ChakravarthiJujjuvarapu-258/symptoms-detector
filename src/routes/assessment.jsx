@@ -16,7 +16,9 @@ const Route = createFileRoute("/assessment")({
       {
         property: "og:description",
         content: "Answer four short steps and get educational health insights and a risk level."
-      }
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" }
     ]
   }),
   component: AssessmentPage

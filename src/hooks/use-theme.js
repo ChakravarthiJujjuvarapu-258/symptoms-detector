@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 const KEY = "aisd.theme";
 function useTheme() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   useEffect(() => {
     const stored = window.localStorage.getItem(KEY);
-    const initial = stored ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const initial = stored ?? "dark";
     setTheme(initial);
     document.documentElement.classList.toggle("dark", initial === "dark");
   }, []);
