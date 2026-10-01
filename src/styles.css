@@ -246,7 +246,8 @@
 @utility display-title {
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 3.2vw, 2.6rem);
-  line-height: 0.95;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   font-weight: 600;
 }
 
