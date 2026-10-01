@@ -177,15 +177,46 @@ function NearbyPage() {
       : null;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 sm:py-12">
-      <header>
-        <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
-          Nearby healthcare finder
-        </h1>
+    <div className="kinetic-page mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 sm:py-12">
+      <header className="animate-fade-up">
+        <p className="eyebrow">Care around you</p>
+        <h1 className="display-title mt-2">Nearby healthcare finder</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Hospitals, clinics, pharmacies and emergency services around your current location.
+          Hospitals, clinics, pharmacies and emergency services around your location.
         </p>
       </header>
+
+      <form onSubmit={searchArea} className="kinetic-panel relative flex flex-col gap-2 p-3 sm:flex-row">
+        <label htmlFor="area-search" className="sr-only">Search area, city or pincode</label>
+        <input
+          id="area-search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Wrong location? Type your area, city or pincode"
+          className="kinetic-input h-10 flex-1 rounded-lg px-3 text-sm"
+        />
+        <div className="flex gap-2">
+          <Button type="submit" className="kinetic-button kinetic-button--gold rounded-lg" disabled={searching}>
+            <MapPin className="size-4" aria-hidden="true" />
+            {searching ? "Searching…" : "Search area"}
+          </Button>
+          <Button type="button" variant="secondary" className="rounded-lg" onClick={locate}>
+            <Crosshair className="size-4" aria-hidden="true" />
+            <span className="hidden sm:inline">Use GPS</span>
+          </Button>
+        </div>
+        {searchResults.length > 1 ? (
+          <ul className="glass-inset absolute left-3 right-3 top-full z-20 mt-2 max-h-64 overflow-auto p-1">
+            {searchResults.map((r) => (
+              <li key={`${r.lat},${r.lng}`}>
+                <button type="button" onClick={() => pickArea(r)} className="w-full rounded-md px-3 py-2 text-left text-sm hover:bg-accent">
+                  {r.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </form>
 
       <div className="flex flex-wrap items-center gap-2">
         {CATEGORIES.map((c) => (
@@ -193,7 +224,7 @@ function NearbyPage() {
             key={c.id}
             variant={category === c.id ? "default" : "outline"}
             size="sm"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={() => setCategory(c.id)}
             aria-pressed={category === c.id}
           >
@@ -201,25 +232,25 @@ function NearbyPage() {
             {c.label}
           </Button>
         ))}
-        <Button variant="secondary" size="sm" className="ml-auto rounded-xl" onClick={locate}>
-          <Crosshair className="size-4" aria-hidden="true" />
-          Use my location
-        </Button>
       </div>
 
-      {coords && accuracy != null ? (
+      {coords ? (
         <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <MapPin className="size-3.5" aria-hidden="true" />
-          Location accurate to ~{accuracy} m
-          {accuracy > 500 ? " — move outdoors or enable GPS for a more precise fix." : ""}
+          {locationSource === "manual"
+            ? "Showing results near the area you searched"
+            : accuracy != null
+              ? `Location accurate to ~${accuracy} m${accuracy > 500 ? " — search your area above for a precise result." : ""}`
+              : "Using your current location"}
         </p>
       ) : null}
 
       {error ? (
-        <p role="status" className="rounded-2xl border border-border bg-surface/60 p-4 text-sm text-muted-foreground">
+        <p role="status" className="glass-inset p-4 text-sm text-muted-foreground">
           {error}
         </p>
       ) : null}
+
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Card className="overflow-hidden rounded-3xl surface-panel">
