@@ -1,23 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-const KEY = "aisd.theme";
+const KEY = "aisd.theme.v2";
 function useTheme() {
   const [theme, setTheme] = useState("light");
   useEffect(() => {
-    const stored = window.localStorage.getItem(KEY);
-    const initial = stored ?? "light";
+    const initial = window.localStorage.getItem(KEY) ?? "light";
     setTheme(initial);
-    document.documentElement.classList.toggle("light", initial === "dark");
+    document.documentElement.classList.toggle("dark", initial === "dark");
   }, []);
   const toggle = useCallback(() => {
     setTheme((prev) => {
-      const next = prev === "light" ? "light" : "light";
+      const next = prev === "dark" ? "light" : "dark";
       window.localStorage.setItem(KEY, next);
-      document.documentElement.classList.toggle("light", next === "dark");
+      document.documentElement.classList.toggle("dark", next === "dark");
       return next;
     });
   }, []);
   return { theme, toggle };
 }
-export {
-  useTheme
-};
+export { useTheme };
