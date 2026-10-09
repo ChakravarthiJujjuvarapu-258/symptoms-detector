@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-const KEY = "aisd.theme.v2";
+const KEY = "aisd.theme.v3";
 function useTheme() {
   const [theme, setTheme] = useState("light");
   useEffect(() => {
