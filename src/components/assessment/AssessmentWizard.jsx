@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Disclaimer } from "@/components/Disclaimer";
 import { EmergencyBanner } from "@/components/results/EmergencyBanner";
 import { DURATION_OPTIONS, MEDICAL_HISTORY_OPTIONS, STEPS } from "./constants";
+import { SymptomPicker } from "./SymptomPicker";
 import { analyzeSymptoms, detectEmergency } from "@/lib/health/engine";
 import { aiAnalyzeSymptoms as analyzeWithAi } from "@/lib/health/ai.functions";
 import { toast } from "sonner";
@@ -234,6 +235,14 @@ function AssessmentWizard({ onComplete }) {
     rows={8}
     className="kinetic-input min-h-52 text-base"
     placeholder="Example: I have had a fever for 3 days with sore throat, headache, cough, and fatigue."
+  />
+              <p className="text-right text-xs text-muted-foreground">{symptoms.length} characters</p>
+              <SymptomPicker
+    value={symptoms}
+    onAdd={(label) => setSymptoms((prev) => {
+      const t = prev.trim();
+      return t ? `${t.replace(/[.,;]$/, "")}, ${label.toLowerCase()}` : `I have ${label.toLowerCase()}`;
+    })}
   />
               {emergencyHit && <EmergencyBanner />}
             </div>}

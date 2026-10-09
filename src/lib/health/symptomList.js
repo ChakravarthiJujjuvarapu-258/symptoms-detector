@@ -85,6 +85,30 @@ export const SYMPTOM_GROUPS = [
       "Low mood", "Irritability", "Panic attacks", "Restlessness", "Hallucinations",
       "Personality changes", "Vertigo", "Pins and needles in hands or feet"
     ]
+  },
+  {
+    group: "Allergy & immune",
+    symptoms: [
+      "Seasonal allergies", "Swollen lips", "Swollen face", "Itchy throat",
+      "Allergic reaction after food", "Reaction to insect sting", "Frequent infections",
+      "Recurrent cold sores", "Hay fever", "Throat tightness"
+    ]
+  },
+  {
+    group: "Hormones & metabolism",
+    symptoms: [
+      "Frequent hunger", "Heat intolerance", "Cold intolerance", "Hot flashes",
+      "Shaky when hungry", "Neck swelling (goitre)", "Bulging eyes", "Darkened skin folds",
+      "Excess facial hair", "Slow heart rate", "Puffy face"
+    ]
+  },
+  {
+    group: "Children & infants",
+    symptoms: [
+      "Baby not feeding well", "Persistent crying", "Fewer wet nappies", "Sunken soft spot",
+      "Rash that does not fade", "High fever in a child", "Ear pulling", "Bedwetting",
+      "Barking cough", "Drowsy or hard to wake"
+    ]
   }
 ];
 
