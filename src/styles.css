@@ -528,3 +528,68 @@ h1, h2, .display-title, .section-title { letter-spacing: -0.01em; font-weight: 7
   .kinetic-nav__item { min-width: 2.5rem; padding-inline: 0.65rem; }
   .kinetic-nav__item span { display: none; }
 }
+
+/* ---------- Ambient animated background ---------- */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient-bg__dots {
+  position: absolute;
+  inset: -12%;
+  background-image: radial-gradient(color-mix(in oklab, var(--primary) 20%, transparent) 1px, transparent 1.4px);
+  background-size: 36px 36px;
+  opacity: 0.45;
+  animation: ambient-pan 120s linear infinite;
+}
+.ambient-bg__orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(72px);
+  opacity: 0.42;
+  will-change: transform;
+}
+.ambient-bg__orb--a {
+  width: 44rem; height: 44rem; top: -14rem; left: -12rem;
+  background: radial-gradient(circle at 32% 32%, color-mix(in oklab, var(--primary) 30%, transparent), transparent 68%);
+  animation: ambient-drift-a 26s ease-in-out infinite alternate;
+}
+.ambient-bg__orb--b {
+  width: 38rem; height: 38rem; bottom: -12rem; right: -10rem;
+  background: radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--teal) 26%, transparent), transparent 68%);
+  animation: ambient-drift-b 34s ease-in-out infinite alternate;
+}
+.ambient-bg__orb--c {
+  width: 26rem; height: 26rem; top: 32%; left: 56%;
+  background: radial-gradient(circle, color-mix(in oklab, var(--teal) 16%, transparent), transparent 70%);
+  animation: ambient-drift-c 42s ease-in-out infinite alternate;
+}
+.ambient-plus {
+  position: absolute;
+  bottom: -3rem;
+  color: color-mix(in oklab, var(--primary) 34%, transparent);
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  animation: ambient-rise 28s linear infinite;
+}
+@keyframes ambient-pan { to { background-position: 360px 360px; } }
+@keyframes ambient-drift-a { to { transform: translate(11%, 16%) scale(1.14); } }
+@keyframes ambient-drift-b { to { transform: translate(-12%, -14%) scale(1.1); } }
+@keyframes ambient-drift-c { to { transform: translate(-9%, 12%) scale(0.88); } }
+@keyframes ambient-rise {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  12% { opacity: 0.8; }
+  85% { opacity: 0.35; }
+  100% { transform: translateY(-108dvh) rotate(160deg); opacity: 0; }
+}
+.dark .ambient-bg__orb { opacity: 0.5; }
+.dark .ambient-bg__dots { opacity: 0.25; }
+.dark .ambient-plus { color: color-mix(in oklab, var(--teal) 44%, transparent); }
+@media (max-width: 767px) {
+  .ambient-bg__orb { filter: blur(56px); }
+  .ambient-bg__orb--c { display: none; }
+}
