@@ -243,6 +243,15 @@ function NearbyPage() {
         ))}
       </div>
 
+      {!coords && loading && locationSource === "gps" ? (
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <MapPin className="size-3.5 animate-pulse" aria-hidden="true" />
+          {accuracy != null
+            ? `Pinpointing your location… accurate to ~${accuracy} m so far`
+            : "Pinpointing your location…"}
+        </p>
+      ) : null}
+
       {coords ? (
         <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <MapPin className="size-3.5" aria-hidden="true" />
