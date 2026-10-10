@@ -612,3 +612,28 @@ h1, h2, .display-title, .section-title { letter-spacing: -0.01em; font-weight: 7
 @media (prefers-reduced-motion: reduce) {
   .route-slide { animation: none; }
 }
+
+/* Heartbeat loader — lub-dub pulse + ECG trace while AI analyzes symptoms */
+.kinetic-heartbeat {
+  animation: heartbeat 1.1s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.24); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.18); }
+  56% { transform: scale(1); }
+}
+.kinetic-ecg {
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+  animation: ecg-trace 1.5s linear infinite;
+}
+@keyframes ecg-trace {
+  to { stroke-dashoffset: -150; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kinetic-heartbeat,
+  .kinetic-ecg { animation: none; }
+}
