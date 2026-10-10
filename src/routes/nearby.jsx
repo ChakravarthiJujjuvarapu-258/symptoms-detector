@@ -115,19 +115,28 @@ function NearbyPage() {
         setError("Could not get your GPS position. Search your area below instead.");
         return;
       }
-      setCoords({ lat: best.coords.latitude, lng: best.coords.longitude });
       const acc = Math.round(best.coords.accuracy);
+      if (acc > 2000) {
+        setCoords(null);
+        setAccuracy(acc);
+        setError("Your browser's location is too imprecise to be useful. Search your area below for accurate results.");
+        return;
+      }
+      setCoords({ lat: best.coords.latitude, lng: best.coords.longitude });
       setAccuracy(acc);
-      if (acc > 1000) {
-        setError("Your browser's location is very imprecise. Search your area below for accurate results.");
+      if (acc > 500) {
+        setError("Your browser's location is rough. Search your area below for a precise result.");
       }
     };
 
-    // Watch for up to 12s and keep only the most accurate fix — never trust the first rough guess.
+    // Watch for up to 20s and keep only the most accurate fix — never trust the first rough guess.
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
-        if (!best || pos.coords.accuracy < best.coords.accuracy) best = pos;
-        if (best.coords.accuracy <= 50) finish();
+        if (!best || pos.coords.accuracy < best.coords.accuracy) {
+          best = pos;
+          setAccuracy(Math.round(pos.coords.accuracy));
+        }
+        if (best.coords.accuracy <= 30) finish();
       },
       () => {
         if (best) finish();
@@ -137,9 +146,9 @@ function NearbyPage() {
           setError("Location permission denied. Allow location access, or search your area below.");
         }
       },
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 12000 }
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 }
     );
-    setTimeout(finish, 12000);
+    setTimeout(finish, 20000);
   }, []);
 
   useEffect(() => {
@@ -233,6 +242,15 @@ function NearbyPage() {
           </Button>
         ))}
       </div>
+
+      {!coords && loading && locationSource === "gps" ? (
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <MapPin className="size-3.5 animate-pulse" aria-hidden="true" />
+          {accuracy != null
+            ? `Pinpointing your location… accurate to ~${accuracy} m so far`
+            : "Pinpointing your location…"}
+        </p>
+      ) : null}
 
       {coords ? (
         <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
