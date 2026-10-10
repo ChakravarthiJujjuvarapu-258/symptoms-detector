@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AmbientBackground } from "@/components/AmbientBackground";
 import { SiteHeader } from "@/components/SiteHeader";
 import { HealthContextPanel } from "@/components/HealthContextPanel";
 import { ChatAssistant } from "@/components/ChatAssistant";
@@ -161,6 +162,7 @@ function RootComponent() {
     return () => data.subscription.unsubscribe();
   }, [router, queryClient]);
   return <QueryClientProvider client={queryClient}>
+      <AmbientBackground />
       <a
     href="#main-content"
     className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
