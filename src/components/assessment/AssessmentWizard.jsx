@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Loader2, Sparkle, Stethoscope } from "lucide-react";
+import { ArrowLeft, ArrowRight, HeartPulse, Sparkle, Stethoscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -107,9 +107,19 @@ function AssessmentWizard({ onComplete }) {
   if (analyzing) {
     return <Card className="kinetic-panel kinetic-analyzing overflow-hidden">
         <CardContent className="flex flex-col items-center gap-4 py-20 text-center">
-          <span className="kinetic-orbit animate-pulse-ring">
-            <Loader2 className="size-7 animate-spin" aria-hidden="true" />
+          <span className="kinetic-orbit animate-pulse-ring text-teal">
+            <HeartPulse className="kinetic-heartbeat size-7" aria-hidden="true" />
           </span>
+          <svg viewBox="0 0 120 24" className="h-6 w-40 text-teal" aria-hidden="true" fill="none">
+            <polyline
+              className="kinetic-ecg"
+              points="0,12 18,12 26,12 32,4 38,20 44,12 58,12 66,12 72,4 78,20 84,12 120,12"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
           <p className="text-lg font-semibold" role="status" aria-live="polite">
             AI is analyzing your symptoms...
           </p>
