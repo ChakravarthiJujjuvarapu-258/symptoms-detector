@@ -150,6 +150,15 @@ function AuthGate({ children }) {
   return children;
 }
 
+function PageTransition({ children }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  return (
+    <div key={pathname} className="route-slide">
+      {children}
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
@@ -174,7 +183,9 @@ function RootComponent() {
           <SiteHeader />
           <div className="kinetic-center">
             <main id="main-content" className="min-h-[70dvh]">
-              <Outlet />
+              <PageTransition>
+                <Outlet />
+              </PageTransition>
             </main>
             <footer className="border-t border-border/60 py-7">
               <div className="mx-auto max-w-6xl px-4 sm:px-6">

@@ -593,3 +593,22 @@ h1, h2, .display-title, .section-title { letter-spacing: -0.01em; font-weight: 7
   .ambient-bg__orb { filter: blur(56px); }
   .ambient-bg__orb--c { display: none; }
 }
+
+/* Page slide transition — new page glides in from the right on every navigation */
+.route-slide {
+  animation: route-slide-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+@keyframes route-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-slide { animation: none; }
+}
