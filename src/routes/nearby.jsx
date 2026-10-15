@@ -14,8 +14,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Disclaimer } from "@/components/Disclaimer";
-import { findNearbyHealthcare, geocodeLocation } from "@/lib/health/places.functions";
+import { findNearbyHealthcare, geocodeLocation, searchHealthcareText } from "@/lib/health/places.functions";
 import { Input } from "@/components/ui/input";
+import { getLastResult, loadHistory } from "@/lib/health/storage";
+import { specialistForResult } from "@/lib/health/specialists";
 
 const Route = createFileRoute("/nearby")({
   head: () => ({
@@ -58,6 +60,25 @@ function NearbyPage() {
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [suggestion, setSuggestion] = useState(null);
+  const [suggested, setSuggested] = useState([]);
+  const [suggestLoading, setSuggestLoading] = useState(false);
+
+  useEffect(() => {
+    const last = getLastResult() ?? loadHistory()[0] ?? null;
+    setSuggestion(specialistForResult(last));
+  }, []);
+
+  useEffect(() => {
+    if (!coords || !suggestion) return;
+    let active = true;
+    setSuggestLoading(true);
+    searchHealthcareText({ data: { ...coords, query: suggestion.query } })
+      .then((res) => active && setSuggested(res.places ?? []))
+      .catch(() => active && setSuggested([]))
+      .finally(() => active && setSuggestLoading(false));
+    return () => { active = false; };
+  }, [coords, suggestion]);
 
   const searchArea = useCallback(async (e) => {
     e?.preventDefault();
@@ -269,6 +290,41 @@ function NearbyPage() {
         </p>
       ) : null}
 
+
+      {suggestion ? (
+        <section className="kinetic-panel space-y-3 p-4" aria-label="Suggested for your symptoms">
+          <div>
+            <p className="eyebrow">Based on your last assessment</p>
+            <h2 className="section-title mt-1">
+              {suggestion.emergency ? "Nearest emergency departments" : `Suggested: ${suggestion.label}`}
+            </h2>
+            {!suggestion.emergency ? (
+              <p className="text-xs text-muted-foreground">Your symptoms mostly matched the {suggestion.category} area. This is a suggestion, not a referral.</p>
+            ) : null}
+          </div>
+          {suggestLoading ? <p className="text-sm text-muted-foreground">Finding matching doctors and hospitals…</p> : null}
+          {!suggestLoading && coords && !suggested.length ? <p className="text-sm text-muted-foreground">No matching specialists found nearby — the general list below can still help.</p> : null}
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {suggested.slice(0, 6).map((p) => (
+              <li key={p.id} className="glass-inset p-3">
+                <button type="button" className="w-full text-left" onClick={() => setSelected({ id: p.id, lat: p.lat, lng: p.lng })}>
+                  <span className="block truncate font-semibold">{p.name}</span>
+                  <span className="block truncate text-xs text-muted-foreground">{p.address}</span>
+                  <span className="mt-1 flex gap-3 text-xs text-muted-foreground">
+                    {p.distanceKm != null ? <span>{p.distanceKm} km</span> : null}
+                    {p.rating ? <span>★ {p.rating}</span> : null}
+                    {p.openNow != null ? <span>{p.openNow ? "Open now" : "Closed"}</span> : null}
+                  </span>
+                </button>
+                <div className="mt-2 flex gap-2">
+                  {p.phone ? <Button asChild size="sm" variant="outline" className="rounded-lg"><a href={`tel:${p.phone}`}><Phone className="size-4" aria-hidden="true" />Call</a></Button> : null}
+                  {p.mapsUri ? <Button asChild size="sm" variant="outline" className="rounded-lg"><a href={p.mapsUri} target="_blank" rel="noopener noreferrer"><MapPin className="size-4" aria-hidden="true" />Directions</a></Button> : null}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Card className="overflow-hidden rounded-3xl surface-panel">
