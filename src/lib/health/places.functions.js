@@ -176,3 +176,58 @@ function haversineKm(lat1, lon1, lat2, lon2) {
     Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
   return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 10) / 10;
 }
+
+/** Search for specialists/hospitals matching a free-text query (e.g. "cardiologist") near a point. */
+export const searchHealthcareText = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => {
+    const lat = Number(input?.lat);
+    const lng = Number(input?.lng);
+    const query = String(input?.query ?? "").trim().slice(0, 120);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("Invalid location");
+    if (query.length < 3) throw new Error("Invalid query");
+    return { lat, lng, query };
+  })
+  .handler(async ({ data }) => {
+    const lovableKey = process.env.LOVABLE_API_KEY;
+    const mapsKey = process.env.GOOGLE_MAPS_API_KEY;
+    if (!lovableKey || !mapsKey) return { places: [], unavailable: true, message: "Nearby search is not configured." };
+    const response = await fetch(`${GATEWAY_URL}/places/v1/places:searchText`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": mapsKey,
+        "Content-Type": "application/json",
+        "X-Goog-FieldMask": FIELD_MASK
+      },
+      body: JSON.stringify({
+        textQuery: data.query,
+        maxResultCount: 10,
+        locationBias: { circle: { center: { latitude: data.lat, longitude: data.lng }, radius: 15000 } }
+      })
+    });
+    if (!response.ok) {
+      console.error(`[places text] failed [${response.status}]: ${await response.text()}`);
+      throw new Error(`Specialist search failed [${response.status}]`);
+    }
+    const json = await response.json();
+    const places = (json.places ?? []).map((p) => {
+      const lat = p.location?.latitude;
+      const lng = p.location?.longitude;
+      return {
+        id: p.id,
+        name: p.displayName?.text ?? "Unnamed place",
+        type: p.primaryTypeDisplayName?.text ?? "",
+        address: p.formattedAddress ?? "",
+        lat, lng,
+        rating: p.rating ?? null,
+        ratingCount: p.userRatingCount ?? null,
+        phone: p.nationalPhoneNumber ?? p.internationalPhoneNumber ?? null,
+        website: p.websiteUri ?? null,
+        openNow: p.currentOpeningHours?.openNow ?? null,
+        mapsUri: p.googleMapsUri ?? null,
+        distanceKm: Number.isFinite(lat) && Number.isFinite(lng) ? haversineKm(data.lat, data.lng, lat, lng) : null
+      };
+    }).sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
+    return { places, unavailable: false, message: "" };
+  });
