@@ -14,6 +14,7 @@ function saveAssessment(result) {
   if (typeof window === "undefined") return;
   const next = [result, ...loadHistory()].slice(0, 100);
   window.localStorage.setItem(KEY, JSON.stringify(next));
+  window.dispatchEvent(new Event("assessment-updated"));
 }
 function deleteAssessment(id) {
   const next = loadHistory().filter((r) => r.id !== id);
@@ -24,6 +25,7 @@ const LAST_RESULT_KEY = "aisd.last-result.v1";
 function setLastResult(result) {
   if (typeof window === "undefined") return;
   window.sessionStorage.setItem(LAST_RESULT_KEY, JSON.stringify(result));
+  window.dispatchEvent(new Event("assessment-updated"));
 }
 function getLastResult() {
   if (typeof window === "undefined") return null;
