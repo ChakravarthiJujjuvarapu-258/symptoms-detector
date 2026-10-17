@@ -81,6 +81,7 @@ function ResultsDashboard({
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap gap-2">
+          <Button asChild variant="outline"><Link to="/nearby"><Stethoscope aria-hidden="true" /><span className="hidden sm:inline">Nearby care</span></Link></Button>
           <DiscussWithDoctor result={result} />
           <Button
     variant="outline"
