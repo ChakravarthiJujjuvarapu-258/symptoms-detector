@@ -8,7 +8,7 @@ const CATEGORY_TYPES = {
   hospital: ["hospital"],
   clinic: ["doctor", "medical_lab"],
   pharmacy: ["pharmacy", "drugstore"],
-  emergency: ["hospital", "fire_station", "police"]
+  emergency: ["hospital"]
 };
 
 const FIELD_MASK = [
@@ -23,7 +23,8 @@ const FIELD_MASK = [
   "places.websiteUri",
   "places.currentOpeningHours.openNow",
   "places.googleMapsUri",
-  "places.primaryTypeDisplayName"
+  "places.primaryTypeDisplayName",
+  "places.types"
 ].join(",");
 
 function validate(input) {
@@ -106,6 +107,8 @@ export const findNearbyHealthcare = createServerFn({ method: "POST" })
         id: p.id,
         name: p.displayName?.text ?? "Unnamed place",
         type: p.primaryTypeDisplayName?.text ?? "",
+        types: p.types ?? [],
+        emergencyListed: /\bemergency\b/i.test(p.displayName?.text ?? ""),
         address: p.formattedAddress ?? "",
         lat,
         lng,
@@ -150,10 +153,11 @@ export const geocodeLocation = createServerFn({ method: "POST" })
     if (!response.ok) {
       const body = await response.text();
       console.error(`[geocode] gateway failed [${response.status}]: ${body}`);
-      throw new Error(`Location search failed [${response.status}]`);
+      throwMapsError(response.status, body, "Location search");
     }
 
     const json = await response.json();
+    if (!["OK", "ZERO_RESULTS"].includes(json.status)) throw new Error(`Location search failed [${json.status}]: ${json.error_message ?? "Provider rejected the request"}`);
     if (json.status !== "OK") {
       return { results: [], unavailable: false, message: "No matching place found. Try a more specific area or pincode." };
     }
@@ -184,9 +188,13 @@ export const searchHealthcareText = createServerFn({ method: "POST" })
     const lat = Number(input?.lat);
     const lng = Number(input?.lng);
     const query = String(input?.query ?? "").trim().slice(0, 120);
-    if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("Invalid location");
+    if (!Number.isFinite(lat) || lat < -90 || lat > 90 || !Number.isFinite(lng) || lng < -180 || lng > 180) throw new Error("Invalid location");
     if (query.length < 3) throw new Error("Invalid query");
-    return { lat, lng, query };
+    const radius = Number(input?.radius ?? 15000);
+    if (!Number.isFinite(radius) || radius < 500 || radius > 25000) throw new Error("Invalid search radius");
+    const provider = String(input?.provider ?? "all");
+    if (!["all", "hospital", "clinic"].includes(provider)) throw new Error("Invalid provider type");
+    return { lat, lng, query, radius, provider };
   })
   .handler(async ({ data }) => {
     const lovableKey = process.env.LOVABLE_API_KEY;
@@ -203,12 +211,14 @@ export const searchHealthcareText = createServerFn({ method: "POST" })
       body: JSON.stringify({
         textQuery: data.query,
         maxResultCount: 10,
-        locationBias: { circle: { center: { latitude: data.lat, longitude: data.lng }, radius: 15000 } }
+        locationBias: { circle: { center: { latitude: data.lat, longitude: data.lng }, radius: data.radius } },
+        ...(data.provider === "hospital" ? { includedType: "hospital", strictTypeFiltering: true } : data.provider === "clinic" ? { includedType: "doctor", strictTypeFiltering: true } : {})
       })
     });
     if (!response.ok) {
-      console.error(`[places text] failed [${response.status}]: ${await response.text()}`);
-      throw new Error(`Specialist search failed [${response.status}]`);
+      const body = await response.text();
+      console.error(`[places text] failed [${response.status}]: ${body}`);
+      throwMapsError(response.status, body, "Specialist search");
     }
     const json = await response.json();
     const places = (json.places ?? []).map((p) => {
@@ -218,6 +228,8 @@ export const searchHealthcareText = createServerFn({ method: "POST" })
         id: p.id,
         name: p.displayName?.text ?? "Unnamed place",
         type: p.primaryTypeDisplayName?.text ?? "",
+        types: p.types ?? [],
+        emergencyListed: /\bemergency\b/i.test(p.displayName?.text ?? ""),
         address: p.formattedAddress ?? "",
         lat, lng,
         rating: p.rating ?? null,
@@ -231,3 +243,11 @@ export const searchHealthcareText = createServerFn({ method: "POST" })
     }).sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
     return { places, unavailable: false, message: "" };
   });
+
+function throwMapsError(status, body, label) {
+  let reason;
+  try { reason = JSON.parse(body)?.error?.details?.find((detail) => detail.reason)?.reason; } catch { /* Keep the original provider response. */ }
+  if (status === 403 && reason === "API_KEY_HTTP_REFERRER_BLOCKED") throw new Error("Google Maps server key is referrer-restricted. In Google Cloud Console, set the server key's application restrictions to None or IP addresses.");
+  if (status === 403 && reason === "API_KEY_SERVICE_BLOCKED") throw new Error("Google Maps server key does not allow this API. Add the requested Maps API to its allowed APIs in Google Cloud Console.");
+  throw new Error(`${label} failed [${status}]: ${body}`);
+}
