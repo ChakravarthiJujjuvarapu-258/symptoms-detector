@@ -1,8 +1,8 @@
 # Roadmap
 
-- [ ] Match Nearby Care to assessment symptoms, possible explanations, and severity.
-- [ ] Add real provider search, filters, location/map interactions, and safe provider actions.
-- [ ] Test matching rules and the signed-in Nearby Care experience.
+- [x] Match Nearby Care to assessment symptoms, possible explanations, and severity.
+- [x] Add real provider search, filters, location/map interactions, and safe provider actions.
+- [x] Test matching rules and the signed-in Nearby Care experience.
 
 - [x] Redesign the assessment, image analysis, and results experience with the Kinetic Elegance workspace.
 - [x] Add polished, accessible animations throughout the redesigned experience.
