@@ -682,3 +682,76 @@ h1, h2, .display-title, .section-title { letter-spacing: -0.01em; font-weight: 7
     transform: none !important;
   }
 }
+
+/* ---- Home page hero ---- */
+.home-hero__frame {
+  position: relative;
+  border-radius: 1.1rem;
+  border: 1px solid color-mix(in oklab, var(--border) 80%, var(--teal) 20%);
+  background: var(--surface);
+  box-shadow: 0 34px 80px -42px color-mix(in oklab, var(--primary) 70%, transparent);
+  overflow: hidden;
+}
+
+.home-hero__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1440 / 1040;
+  object-fit: cover;
+}
+
+.home-hero__glow {
+  position: absolute;
+  inset: -8% -6%;
+  border-radius: 2rem;
+  background:
+    radial-gradient(ellipse 60% 55% at 30% 20%, color-mix(in oklab, var(--teal) 22%, transparent), transparent),
+    radial-gradient(ellipse 50% 50% at 80% 85%, color-mix(in oklab, var(--primary) 18%, transparent), transparent);
+  filter: blur(8px);
+  animation: home-glow 9s ease-in-out infinite alternate;
+}
+
+@keyframes home-glow {
+  from { opacity: 0.55; transform: scale(0.98) translateY(4px); }
+  to { opacity: 1; transform: scale(1.02) translateY(-4px); }
+}
+
+.home-hero__frame { z-index: 1; }
+
+.home-hero__chip {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.75rem;
+  animation: home-chip-float 6s ease-in-out infinite;
+}
+
+.home-hero__chip strong { display: block; font-size: 0.78rem; line-height: 1.15; }
+.home-hero__chip span { display: block; color: var(--muted-foreground); font-size: 0.65rem; }
+.home-hero__chip--a { left: -1rem; top: 12%; }
+.home-hero__chip--b { right: -0.75rem; bottom: 10%; animation-delay: 2.4s; }
+
+@keyframes home-chip-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+.home-step__num {
+  position: absolute;
+  top: 1rem;
+  right: 1.15rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: color-mix(in oklab, var(--teal) 26%, transparent);
+}
+
+@media (max-width: 640px) {
+  .home-hero__chip--a { left: 0.5rem; }
+  .home-hero__chip--b { right: 0.5rem; }
+}
