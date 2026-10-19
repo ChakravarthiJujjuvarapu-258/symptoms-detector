@@ -128,7 +128,7 @@ function Landing() {
             style={{ animationDelay: "80ms" }}
           >
             Describe what feels different and receive a structured, safety-aware overview in minutes
-            \u2014 so you know what to watch, what to ask, and where to go next.
+            — so you know what to watch, what to ask, and where to go next.
           </p>
           <div className="animate-fade-up mt-8 flex flex-wrap gap-3" style={{ animationDelay: "160ms" }}>
             <Button asChild size="lg" className="kinetic-button kinetic-button--gold min-h-12 px-7 text-base">
@@ -168,6 +168,8 @@ function Landing() {
               src={heroImage}
               alt="A doctor reviewing a health assessment on a tablet in a modern clinic"
               className="home-hero__img"
+              width={1440}
+              height={1040}
               loading="eager"
             />
             <div className="home-hero__chip home-hero__chip--a glass-panel" aria-hidden="true">
