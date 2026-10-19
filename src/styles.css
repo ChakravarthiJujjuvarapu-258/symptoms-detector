@@ -637,3 +637,48 @@ h1, h2, .display-title, .section-title { letter-spacing: -0.01em; font-weight: 7
   .kinetic-heartbeat,
   .kinetic-ecg { animation: none; }
 }
+
+/* Shared button motion also covers navigation links and native symptom chips. */
+:root {
+  --button-motion-duration: 220ms;
+  --button-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --button-hover-shadow: 0 6px 16px -8px color-mix(in oklab, var(--ring) 55%, transparent);
+  --button-press-shadow: 0 1px 5px -2px color-mix(in oklab, var(--ring) 35%, transparent);
+}
+
+:is(button, .motion-button):not([role="switch"], [role="checkbox"], [role="radio"]) {
+  transition: transform var(--button-motion-duration) var(--button-motion-ease),
+    box-shadow var(--button-motion-duration) ease,
+    background-color var(--button-motion-duration) ease,
+    border-color var(--button-motion-duration) ease,
+    color var(--button-motion-duration) ease;
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:is(button, .motion-button) > svg:not(.kinetic-heartbeat) {
+  transition: transform var(--button-motion-duration) var(--button-motion-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(button, .motion-button):not(:disabled, [aria-disabled="true"], [data-disabled], [role="switch"], [role="checkbox"], [role="radio"]):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--button-hover-shadow);
+  }
+  :is(button, .motion-button):not(:disabled, [aria-disabled="true"], [data-disabled], [role="switch"], [role="checkbox"], [role="radio"]):hover > svg:not(.animate-spin, .kinetic-heartbeat) {
+    transform: translateY(-1px) scale(1.08);
+  }
+}
+
+:is(button, .motion-button):not(:disabled, [aria-disabled="true"], [data-disabled], [role="switch"], [role="checkbox"], [role="radio"]):active {
+  transform: translateY(0) scale(0.97);
+  box-shadow: var(--button-press-shadow);
+  transition-duration: 90ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(button, .motion-button), :is(button, .motion-button) > svg {
+    transition: none !important;
+    transform: none !important;
+  }
+}
