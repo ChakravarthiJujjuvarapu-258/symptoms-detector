@@ -670,7 +670,7 @@ h1, h2, .display-title, .section-title { letter-spacing: -0.01em; font-weight: 7
   }
 }
 
-:is(button, .motion-button):not(:disabled, [aria-disabled="true"], [data-disabled], [role="switch"], [role="checkbox"], [role="radio"]):active {
+:is(button, .motion-button):not(:disabled, [aria-disabled="true"], [data-disabled], [role="switch"], [role="checkbox"], [role="radio"]):is(:active, :hover:active) {
   transform: translateY(0) scale(0.97);
   box-shadow: var(--button-press-shadow);
   transition-duration: 90ms;
