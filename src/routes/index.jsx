@@ -146,14 +146,14 @@ function Landing() {
             </Button>
           </div>
           <dl
-            className="animate-fade-up mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4"
+            className="animate-fade-up mt-10 grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border"
             style={{ animationDelay: "240ms" }}
           >
             {HERO_STATS.map((stat) => (
-              <div key={stat.label} className="bg-card/80 px-3 py-4 backdrop-blur sm:px-4">
+              <div key={stat.label} className="bg-card/80 px-4 py-4 backdrop-blur">
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-display text-base font-semibold text-foreground">{stat.value}</dd>
-                <dd className="mt-1 text-[0.62rem] font-semibold uppercase tracking-normal text-muted-foreground">
+                <dd className="font-display whitespace-nowrap text-lg font-semibold text-foreground sm:text-xl">{stat.value}</dd>
+                <dd className="mt-1 text-[0.68rem] font-semibold uppercase tracking-wider text-muted-foreground">
                   {stat.label}
                 </dd>
               </div>
