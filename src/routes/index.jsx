@@ -152,7 +152,7 @@ function Landing() {
             {HERO_STATS.map((stat) => (
               <div key={stat.label} className="bg-card/80 px-3 py-4 backdrop-blur sm:px-4">
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-display text-base font-semibold text-foreground sm:text-lg">{stat.value}</dd>
+                <dd className="font-display text-base font-semibold text-foreground">{stat.value}</dd>
                 <dd className="mt-1 text-[0.62rem] font-semibold uppercase tracking-normal text-muted-foreground">
                   {stat.label}
                 </dd>
