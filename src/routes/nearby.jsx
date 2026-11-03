@@ -15,6 +15,7 @@ const TITLE = "Nearby Care — AI Symptoms Detector";
 const DESCRIPTION = "Find real doctors, specialists and hospitals near you, suggested from your symptoms and assessment urgency.";
 export const Route = createFileRoute("/nearby")({
   head: () => ({ meta: [{ title: TITLE }, { name: "description", content: DESCRIPTION }, { property: "og:title", content: TITLE }, { property: "og:description", content: DESCRIPTION }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
+  validateSearch: (search) => ({ focus: typeof search.focus === "string" ? search.focus : undefined }),
   component: NearbyPage
 });
 const MAPS_KEY = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY;
@@ -48,7 +49,13 @@ function NearbyPage() {
   const gps = useRef(null);
   const areaVersion = useRef(0);
   const cache = useRef(new Map());
+  const focusRef = useRef(null);
+  const search = Route.useSearch();
   const plan = useMemo(() => carePlanForResult(assessment), [assessment]);
+
+  useEffect(() => {
+    if (search?.focus === "doctors") focusRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [search?.focus]);
 
   useEffect(() => {
     const update = () => {
