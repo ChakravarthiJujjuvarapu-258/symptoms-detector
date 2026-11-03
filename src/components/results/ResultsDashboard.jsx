@@ -9,6 +9,7 @@ import {
   Download,
   FlaskConical,
   HeartPulse,
+  MapPin,
   Pill,
   RotateCcw,
   Stethoscope,
@@ -27,6 +28,7 @@ import { RiskGauge } from "./RiskGauge";
 import { SymptomCategoryChart } from "./SymptomCategoryChart";
 import { RISK_META } from "@/lib/health/engine";
 import { conditionVisual } from "@/lib/health/imagery";
+import { SPECIALTIES, carePlanForResult } from "@/lib/health/specialists";
 
 import { exportAssessmentPdf } from "@/lib/health/export";
 function SectionCard({
