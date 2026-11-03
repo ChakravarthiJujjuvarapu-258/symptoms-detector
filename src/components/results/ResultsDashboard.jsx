@@ -9,6 +9,7 @@ import {
   Download,
   FlaskConical,
   HeartPulse,
+  MapPin,
   Pill,
   RotateCcw,
   Stethoscope,
@@ -27,6 +28,7 @@ import { RiskGauge } from "./RiskGauge";
 import { SymptomCategoryChart } from "./SymptomCategoryChart";
 import { RISK_META } from "@/lib/health/engine";
 import { conditionVisual } from "@/lib/health/imagery";
+import { SPECIALTIES, carePlanForResult } from "@/lib/health/specialists";
 
 import { exportAssessmentPdf } from "@/lib/health/export";
 function SectionCard({
@@ -53,6 +55,7 @@ function ResultsDashboard({
   result,
   onRestart
 }) {
+  const plan = carePlanForResult(result);
   const timeline = [
     {
       label: "Symptoms entered",
@@ -97,6 +100,19 @@ function ResultsDashboard({
           </Button>
         </div>
       </div>
+
+      {plan && <SectionCard title="Doctor recommended for your symptoms" icon={Stethoscope} delay={40}>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-sm text-muted-foreground">Based on your symptoms and urgency, start with:</p>
+            <p className="mt-1 text-xl font-semibold">{SPECIALTIES[plan.primary]?.label ?? "General physician"}</p>
+            <p className="mt-1 text-xs text-teal">Suggested care path: {plan.specialtyIds.map((id) => SPECIALTIES[id].label).join(" → ")}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{plan.reason}</p>
+            <p className="mt-2 text-xs text-muted-foreground">A suggestion to guide your search — not a referral or a diagnosis. Nearby care shows real doctors and hospitals with a map.</p>
+          </div>
+          <Button asChild className="shrink-0"><Link to="/nearby" search={{ focus: "doctors" }}><MapPin aria-hidden="true" />Show doctors & map nearby</Link></Button>
+        </div>
+      </SectionCard>}
 
       <div className="grid gap-5 lg:grid-cols-3">
         <SectionCard title="Risk level" icon={HeartPulse} delay={0}>
