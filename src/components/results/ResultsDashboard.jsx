@@ -55,6 +55,7 @@ function ResultsDashboard({
   result,
   onRestart
 }) {
+  const plan = carePlanForResult(result);
   const timeline = [
     {
       label: "Symptoms entered",
