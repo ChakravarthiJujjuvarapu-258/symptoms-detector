@@ -73,7 +73,7 @@ function ResultsDashboard({
       <div className="results-heading animate-fade-up grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
         <div className="min-w-0">
           <p className="eyebrow">AI assessment complete</p>
-          <h1 className="display-title mt-1 truncate">
+          <h1 className="display-title mt-1">
             Your assessment results
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
