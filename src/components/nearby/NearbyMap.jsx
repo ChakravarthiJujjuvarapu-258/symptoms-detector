@@ -63,10 +63,10 @@ export function NearbyMap({ coords, providers, selectedId, onSelect, className =
 
     const renderMap = async () => {
       const google = await loadGoogleMaps();
-      const { Map } = await google.maps.importLibrary("maps");
+      const { Map: GoogleMap } = await google.maps.importLibrary("maps");
       if (!active || !containerRef.current) return;
 
-      const map = mapRef.current ?? new Map(containerRef.current, {
+      const map = mapRef.current ?? new GoogleMap(containerRef.current, {
         center: { lat: coords.lat, lng: coords.lng },
         zoom: 13,
         mapTypeControl: false,
@@ -87,7 +87,7 @@ export function NearbyMap({ coords, providers, selectedId, onSelect, className =
       markers.push(currentMarker);
 
       const infoWindow = new google.maps.InfoWindow();
-      const providerMarkers = new Map();
+      const providerMarkers = new globalThis.Map();
       mappedProviders.forEach((place, index) => {
         const marker = new google.maps.Marker({
           map,
@@ -121,7 +121,7 @@ export function NearbyMap({ coords, providers, selectedId, onSelect, className =
     return () => {
       active = false;
       markers.forEach((marker) => marker.setMap(null));
-      markersRef.current = new Map();
+      markersRef.current = new globalThis.Map();
     };
   }, [coords, mappedProviders, onSelect]);
 
