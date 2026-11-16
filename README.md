@@ -19,6 +19,7 @@ A smart, easy-to-use health information web app that helps you understand what m
   - Urgency level and any warning signs that need quick medical attention.
   - A risk badge and a visual health score.
   - Suggested medical tests, general care tips, and the right type of doctor to visit.
+  - A doctor recommendation on the results page, with a shortcut to matching nearby providers and their map.
   - Follow-up questions the AI would ask a real doctor.
   - Trusted medical references from MedlinePlus.
 
@@ -43,9 +44,12 @@ A smart, easy-to-use health information web app that helps you understand what m
 - The assistant also helps you find nearby hospitals, clinics, and pharmacies.
 
 ### 5. Nearby Healthcare Finder
-- Find hospitals, clinics, pharmacies, and emergency services near your current location.
-- Shows a live map, distance from your location, ratings, open status, and one-tap buttons to call or get directions.
-- Uses your device location with high accuracy when you allow it.
+- Open Nearby Care from an assessment result to see a suggested doctor type and matching provider search.
+- Find hospitals, clinics, pharmacies, and other healthcare providers near your current location or a searched area.
+- The interactive map marks your location and the matching providers; selecting a map marker highlights its listing, and selecting a provider recenters the map.
+- Compare available provider details such as distance, rating, and reported opening status, then use available call or directions links.
+- Allow location access for GPS-based results, or enter a city, area, or postal code instead. Search radius and provider filters can be adjusted.
+- Listings and map availability depend on Google Maps being configured for the deployed site. Provider details, emergency services, hours, and appointment availability should be confirmed directly; the app does not guarantee them.
 
 ### 6. History and Reports
 - Saves your past symptom assessments in your browser's local storage.
@@ -61,7 +65,7 @@ A smart, easy-to-use health information web app that helps you understand what m
 ## Technologies Used
 
 - **Frontend framework:** TanStack Start with React 19
-- **Build tool:** Vite 7
+- **Build tool:** Vite 8
 - **Styling:** Tailwind CSS v4 with a clean medical design system
 - **UI components:** shadcn/ui
 - **Charts and visuals:** recharts
@@ -132,6 +136,8 @@ These settings are used to connect the app to AI services and the backend. Serve
 | `LOVABLE_API_KEY` | Key for calling the Lovable AI Gateway from the server |
 | `VITE_SUPABASE_URL` | Your Lovable Cloud project URL (created automatically) |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Public key for connecting to Lovable Cloud (created automatically) |
+
+Nearby Care also needs the Google Maps Platform connection configured in Lovable for provider search and the browser map key/tracking ID. Configure it through Lovable's connector settings; do not put private connector credentials in browser code or commit them. The map needs to be opened on an authorized site. If it cannot load, provider direction links may still be available.
 
 Do not share or commit secret keys. On Lovable Cloud, secrets are managed safely through the Lovable backend settings.
 
