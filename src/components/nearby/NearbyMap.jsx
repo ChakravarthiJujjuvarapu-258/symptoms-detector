@@ -126,14 +126,20 @@ export function NearbyMap({ coords, providers, selectedId, onSelect, className =
   }, [coords, mappedProviders, onSelect]);
 
   useEffect(() => {
-    if (!selectedId || !mapRef.current) return;
+    if (!mapRef.current || !coords) return;
+    if (!selectedId) {
+      mapRef.current.setCenter({ lat: coords.lat, lng: coords.lng });
+      mapRef.current.setZoom(14);
+      return;
+    }
     const marker = markersRef.current.get(selectedId);
     if (marker) mapRef.current.panTo(marker.getPosition());
-  }, [selectedId]);
+  }, [selectedId, coords]);
 
   return (
     <div className={`relative ${className}`}>
       <div ref={containerRef} role="region" aria-label="Map showing your location and nearby healthcare providers" className="h-full w-full" />
+      {coords && !MAPS_KEY && <div role="status" className="absolute inset-0 flex items-center justify-center bg-background/90 px-6 text-center text-sm text-muted-foreground">Map is not configured. Provider directions are still available.</div>}
       {mapError && <div role="status" className="absolute inset-0 flex items-center justify-center bg-background/90 px-6 text-center text-sm text-muted-foreground">{mapError}</div>}
     </div>
   );

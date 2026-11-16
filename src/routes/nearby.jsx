@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { ProviderCard } from "@/components/nearby/ProviderCard";
+import { NearbyMap } from "@/components/nearby/NearbyMap";
 import { findNearbyHealthcare, geocodeLocation, searchHealthcareText } from "@/lib/health/places.functions";
 import { getLastResult, loadHistory } from "@/lib/health/storage";
 import { SPECIALTIES, carePlanForResult, providerMatchesFilters, rankProviders } from "@/lib/health/specialists";
@@ -18,7 +19,6 @@ export const Route = createFileRoute("/nearby")({
   validateSearch: (search) => ({ focus: typeof search.focus === "string" ? search.focus : undefined }),
   component: NearbyPage
 });
-const MAPS_KEY = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY;
 const DISCLAIMER = "Your symptoms may have several possible causes. These results are for informational purposes only and are not a medical diagnosis. Please consult a qualified healthcare professional for proper evaluation.";
 
 function NearbyPage() {
@@ -54,8 +54,8 @@ function NearbyPage() {
   const plan = useMemo(() => carePlanForResult(assessment), [assessment]);
 
   useEffect(() => {
-    if (search?.focus === "doctors") focusRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [search?.focus]);
+    if (search?.focus === "doctors" && coords) focusRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [search?.focus, coords]);
 
   useEffect(() => {
     const update = () => {
@@ -157,9 +157,7 @@ function NearbyPage() {
   }, [coords, specialty, provider, radius, refresh, nearby, textSearch]);
   const filtered = useMemo(() => rankProviders(places.filter((p) => providerMatchesFilters(p, { rating: Number(rating), openNow, emergencyOnly, radiusKm: Number(radius) })), specialty), [places, rating, openNow, emergencyOnly, radius, specialty]);
   const selectedPlace = filtered.find((p) => p.id === selected);
-  const mapUrl = MAPS_KEY && coords ? selectedPlace
-    ? `https://www.google.com/maps/embed/v1/place?key=${MAPS_KEY}&q=place_id:${encodeURIComponent(selectedPlace.id)}`
-    : `https://www.google.com/maps/embed/v1/view?key=${MAPS_KEY}&center=${coords.lat},${coords.lng}&zoom=13` : null;
+  const selectProvider = useCallback((id) => setSelected(id), []);
   const selectOptions = [...new Set([...(plan?.specialtyIds ?? []), ...Object.keys(SPECIALTIES)])];
 
   return <div className="kinetic-page mx-auto max-w-6xl space-y-6 px-4 py-7 sm:px-7 sm:py-10">
@@ -175,7 +173,7 @@ function NearbyPage() {
       <FilterSelect label="Minimum rating" value={rating} onChange={setRating} options={[["0", "All ratings"], ["3", "3+ stars"], ["4", "4+ stars"], ["4.5", "4.5+ stars"]]} />
     </div><div className="flex flex-wrap items-center gap-x-6 gap-y-3"><label className="flex items-center gap-2 text-sm"><Switch checked={openNow} onCheckedChange={setOpenNow} aria-label="Open now" />Open Now</label><label className="flex items-center gap-2 text-sm"><Switch checked={emergencyOnly} onCheckedChange={setEmergencyOnly} aria-label="Emergency care listed" />Emergency care listed</label><Button variant="ghost" size="sm" onClick={() => { setRating("0"); setOpenNow(false); setEmergencyOnly(false); }}><RotateCcw aria-hidden="true" />Clear filters</Button></div></section>
     <div ref={focusRef} id="providers" className="grid scroll-mt-4 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]"><section aria-label="Recommended providers"><div className="mb-4 flex items-center justify-between gap-3"><h2 className="section-title text-lg">{provider === "pharmacy" ? "Nearby pharmacies" : SPECIALTIES[specialty].label}</h2><span className="text-xs text-muted-foreground">{filtered.length} results</span></div>{loading ? <div className="flex items-center gap-3 border-y border-border py-10" role="status"><HeartPulse className="kinetic-heartbeat size-6 text-teal" aria-hidden="true" /><p className="text-sm text-muted-foreground">Finding matching healthcare providers…</p></div> : error ? <div role="status" className="border-y border-border py-6"><p className="break-words text-sm text-muted-foreground">{error}</p><Button className="mt-3" variant="outline" onClick={() => setRefresh((n) => n + 1)}><RotateCcw aria-hidden="true" />Try again</Button></div> : !coords ? <p className="py-10 text-sm text-muted-foreground">Provider results appear after you choose your location.</p> : filtered.length === 0 ? <div className="border-y border-border py-8"><p className="text-sm font-semibold">No matching providers found</p><p className="mt-2 text-sm text-muted-foreground">Try a wider radius, another suggested specialty, or fewer filters. Missing hours and emergency details cannot be treated as confirmed availability.</p></div> : <div className="space-y-3">{filtered.map((place) => <ProviderCard key={place.id} place={place} selected={selected === place.id} onSelect={() => setSelected(place.id)} />)}</div>}<p className="mt-4 text-xs text-muted-foreground">Provider listings: Google Maps. Distances are straight-line estimates, not travel distances. Specialties, departments, emergency services and consultation availability should be confirmed with the provider.</p></section>
-      <section aria-label="Healthcare map" className="xl:sticky xl:top-6"><div className="mb-4 flex items-center justify-between gap-2"><h2 className="section-title text-lg">Care around you</h2>{selectedPlace && <Button variant="ghost" size="sm" onClick={() => setSelected(null)}>Your location</Button>}</div><div className="overflow-hidden rounded-lg border border-border bg-muted">{mapUrl ? <iframe title={selectedPlace ? `Map of ${selectedPlace.name}` : "Nearby healthcare location map"} src={mapUrl} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="h-[360px] w-full border-0 sm:h-[480px]" allowFullScreen /> : <div className="flex h-[360px] items-center justify-center gap-2 px-6 text-center text-sm text-muted-foreground"><MapPin className="size-5 shrink-0" aria-hidden="true" />{coords ? "Map is not configured. Provider direction links are still available." : "Waiting for your location"}</div>}</div>{selectedPlace && <p className="mt-3 break-words text-sm font-semibold">{selectedPlace.name}</p>}</section></div>
+      <section aria-label="Healthcare map" className="xl:sticky xl:top-6"><div className="mb-4 flex items-center justify-between gap-2"><h2 className="section-title text-lg">Care around you</h2>{selectedPlace && <Button variant="ghost" size="sm" onClick={() => setSelected(null)}>Your location</Button>}</div><div className="h-[360px] overflow-hidden rounded-lg border border-border bg-muted sm:h-[480px]">{coords ? <NearbyMap coords={coords} providers={filtered} selectedId={selected} onSelect={selectProvider} className="h-full w-full" /> : <div className="flex h-full items-center justify-center gap-2 px-6 text-center text-sm text-muted-foreground"><MapPin className="size-5 shrink-0" aria-hidden="true" />Waiting for your location</div>}</div>{selectedPlace && <p className="mt-3 break-words text-sm font-semibold">{selectedPlace.name}</p>}</section></div>
     <p className="border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">{DISCLAIMER}</p>
   </div>;
 }

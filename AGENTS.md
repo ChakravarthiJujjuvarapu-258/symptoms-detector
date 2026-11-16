@@ -11,5 +11,6 @@
 
 - Keep care-specialty matching and provider filtering in a browser-safe health module with focused rule tests, so assessment handoff stays deterministic.
 - Nearby Care uses authenticated, bounded Places searches and real listing fields; unknown capabilities and bookings stay unverified to avoid misleading medical referrals.
+- Render Nearby Care with the Maps JavaScript API so user and provider markers can stay synchronized with the assessment-driven list.
 - Share assessment updates through a browser event in addition to local/session storage so mounted care views can refresh without polling.
 - Keep button motion in shared CSS and mark shared Button links with motion-button, so every page gets consistent accessible feedback without changing actions.
