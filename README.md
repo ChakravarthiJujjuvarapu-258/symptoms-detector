@@ -1,6 +1,6 @@
 # AI Symptoms Detector
 
-A smart, easy-to-use health information web app that helps you understand what might be causing your symptoms. It uses artificial intelligence to analyze symptoms you describe in words, images you upload, and questions you ask in a chat. The app is designed to look and feel like a professional healthcare tool, and it works smoothly on phones, tablets, and computers.
+A responsive health-information app that offers educational symptom assessments, visual symptom information, health-topic chat, and nearby healthcare listings. Assessment results are suggestions for discussion with a qualified healthcare professional—not a diagnosis.
 
 > **Important:** This app is for educational and informational purposes only. It cannot diagnose medical conditions. Always talk to a qualified doctor or healthcare provider for a proper diagnosis and treatment. If your symptoms are severe, getting worse, or feel like an emergency, seek medical help right away.
 
@@ -11,20 +11,20 @@ A smart, easy-to-use health information web app that helps you understand what m
 ## What This App Can Do
 
 ### 1. Symptom Checker
-- Answer simple step-by-step questions about your age, medical history, symptoms, how long they have lasted, pain level, body temperature, and daily habits.
-- The app uses AI to look at your answers and suggest possible health conditions that might match.
+- Answer a step-by-step assessment covering age, gender, medical history, symptoms, duration, pain, temperature, and other health context.
+- AI may suggest possible explanations; a local rule-based assessment is used if the AI service is unavailable.
 - It also shows:
   - How likely each condition might be (Low, Moderate, or High match).
   - Symptoms that support and do not support each suggestion.
   - Urgency level and any warning signs that need quick medical attention.
   - A risk badge and a visual health score.
   - Suggested medical tests, general care tips, and the right type of doctor to visit.
-  - A doctor recommendation on the results page, with a shortcut to matching nearby providers and their map.
-  - Follow-up questions the AI would ask a real doctor.
+  - A suggested care specialty and a shortcut to matching nearby providers and their map.
+  - Follow-up questions to discuss with a qualified clinician.
   - Trusted medical references from MedlinePlus.
 
 ### 2. Symptom Image Analysis
-- Upload a clear photo of a visible symptom, such as a skin rash, swelling, or redness.
+- Upload a clear JPG, PNG, or WebP photo (up to 8 MB) of a visible symptom, such as a skin rash, swelling, or redness.
 - You can drag and drop the image or use the file picker.
 - Preview, remove, or replace the image before analyzing it.
 - The AI looks for visible features like redness, swelling, spots, scaling, or texture changes.
@@ -33,32 +33,31 @@ A smart, easy-to-use health information web app that helps you understand what m
 - If the image is blurry or unclear, the app asks you to upload a better photo.
 
 ### 3. AI Health Chat Assistant
-- A friendly floating chatbot answers general health questions.
-- It gives educational answers and shows trusted MedlinePlus references.
+- A floating health-information assistant answers general health questions.
+- It gives educational answers and may show MedlinePlus references; if its AI service is unavailable, it can use a small set of local answers.
 - It follows strict safety rules: it does not diagnose, does not prescribe medicine, and tells you to see a doctor when needed.
 
-### 4. Talk to a Doctor
-- A "Discuss With a Doctor" feature opens a live consultation chat with an AI doctor assistant.
-- The AI doctor assistant reviews your generated report, asks focused questions, and guides you toward proper medical care.
-- You can copy your report, download it as a PDF, or share it by email.
-- The assistant also helps you find nearby hospitals, clinics, and pharmacies.
+### 4. Assessment Follow-up
+- The "Discuss With a Doctor" panel opens an AI consultation chat that can review your assessment report and answer educational questions.
+- The AI is not a doctor and cannot diagnose or replace a licensed clinician.
+- Copy the assessment summary, download it as a PDF, email it, or open Nearby Care.
 
 ### 5. Nearby Healthcare Finder
-- Open Nearby Care from an assessment result to see a suggested doctor type and matching provider search.
+- Open Nearby Care from an assessment result to see suggested specialties and a matching provider search. Matching uses the reported symptoms, possible explanations, and urgency as guidance—not as a confirmed diagnosis.
 - Find hospitals, clinics, pharmacies, and other healthcare providers near your current location or a searched area.
-- The interactive map marks your location and the matching providers; selecting a map marker highlights its listing, and selecting a provider recenters the map.
+- When Maps is available, the interactive map marks your location and matching providers; selecting a map marker highlights its listing, and selecting a provider recenters the map.
 - Compare available provider details such as distance, rating, and reported opening status, then use available call or directions links.
 - Allow location access for GPS-based results, or enter a city, area, or postal code instead. Search radius and provider filters can be adjusted.
-- Listings and map availability depend on Google Maps being configured for the deployed site. Provider details, emergency services, hours, and appointment availability should be confirmed directly; the app does not guarantee them.
+- Provider search and map display require Google Maps Platform to be configured for an authorized site. Provider details, emergency services, hours, and appointment availability are not guaranteed; confirm them directly. For urgent symptoms, do not wait for search results.
 
 ### 6. History and Reports
-- Saves your past symptom assessments in your browser's local storage.
-- You can search, view, delete, or export any past report.
+- Saves up to 100 past symptom assessments in this browser's local storage on this device.
+- Search saved summaries, export a report as PDF, or delete an assessment. History does not sync between devices.
 
 ### 7. User Login
-- Sign in with email and password, Google account, or mobile phone OTP.
+- Sign in with email and password, Google, or a one-time code sent to a mobile phone.
 - The app asks you to log in before you can use the main features.
-- Mobile OTP includes a resend button and clear messages if the code expires or fails to send.
+- Email account creation may require email confirmation. Mobile codes expire and have a resend wait period.
 
 ---
 
@@ -70,7 +69,7 @@ A smart, easy-to-use health information web app that helps you understand what m
 - **UI components:** shadcn/ui
 - **Charts and visuals:** recharts
 - **Icons:** Lucide React
-- **Backend and authentication:** Lovable Cloud (powered by Supabase)
+- **Backend and authentication:** Lovable Cloud
 - **AI engine:** Lovable AI Gateway with secure server-side calls
 - **Medical references:** MedlinePlus Health Topics API
 - **Programming language:** JavaScript (JSX) with some TypeScript files required by the framework
@@ -85,16 +84,16 @@ src/
   hooks/             # Custom logic for login, mobile view, and theme
   integrations/      # Lovable Cloud connection and auth setup
   lib/               # Helper functions and health-related logic
-    health/            # AI analysis, chat, doctor consult, image handling, reports
-  routes/            # Pages of the app
-    api/               # Server-side API endpoints
-    assessment.jsx     # Symptom checker page
-    auth.jsx           # Login page
-    history.jsx        # Past reports page
-    image-analysis.jsx # Image analysis page
-    nearby.jsx         # Nearby healthcare finder page
+    health/            # Assessment, AI, image, chat, care matching, and reports
+  routes/            # File-based app pages and API handlers
+    api/               # Image-analysis API route
+    assessment.jsx     # Symptom assessment and results
+    auth.jsx           # Sign-in and account creation
+    history.jsx        # Locally saved assessments
+    image-analysis.jsx # Symptom photo analysis
+    nearby.jsx         # Nearby healthcare search and map
     index.jsx          # Home page
-  styles.css         # Global colors, fonts, and Tailwind setup
+  styles.css         # Global design tokens and Tailwind setup
 ```
 
 ---
@@ -102,13 +101,13 @@ src/
 ## How to Run the Project Locally
 
 ### What you need
-- Node.js (LTS version recommended)
-- npm or bun package manager
+- Node.js and npm
+- Access to this project's Lovable Cloud configuration for sign-in and AI features
 
 ### Step 1: Install dependencies
 
 ```sh
-npm install
+npm ci
 ```
 
 ### Step 2: Start the development server
@@ -127,19 +126,11 @@ npm run build
 
 ---
 
-## Environment Variables
+## Service Setup
 
-These settings are used to connect the app to AI services and the backend. Server-side variables are read only inside secure handlers. Public frontend settings use the `VITE_` prefix.
+Lovable Cloud supplies the authentication, backend, and AI configuration. Nearby Care also requires a Google Maps Platform connection for provider search and map display. Configure services through Lovable; do not paste private credentials into app code or commit them.
 
-| Variable | Purpose |
-|----------|---------|
-| `LOVABLE_API_KEY` | Key for calling the Lovable AI Gateway from the server |
-| `VITE_SUPABASE_URL` | Your Lovable Cloud project URL (created automatically) |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Public key for connecting to Lovable Cloud (created automatically) |
-
-Nearby Care also needs the Google Maps Platform connection configured in Lovable for provider search and the browser map key/tracking ID. Configure it through Lovable's connector settings; do not put private connector credentials in browser code or commit them. The map needs to be opened on an authorized site. If it cannot load, provider direction links may still be available.
-
-Do not share or commit secret keys. On Lovable Cloud, secrets are managed safely through the Lovable backend settings.
+Google Maps works only on authorized site addresses. Its map or provider search may be unavailable on a local or custom domain that is not authorized. Provider direction links may still be available if the map cannot load.
 
 ---
 
@@ -150,7 +141,8 @@ Do not share or commit secret keys. On Lovable Cloud, secrets are managed safely
 - Emergency symptoms trigger a clear red warning to seek immediate care.
 - The app does not recommend prescription medicines or dosages.
 - Users are always encouraged to consult a real healthcare professional.
-- Uploaded images are only used for analysis and are not stored permanently unless the user chooses to save them.
+- Assessment history is saved only in the current browser's local storage; it does not automatically sync between devices.
+- Uploaded symptom images are used for analysis and are not included in the locally saved assessment history. Avoid uploading identifying or sensitive images.
 
 ---
 
@@ -170,7 +162,7 @@ After that, your project will stay in sync with GitHub.
 
 ## License
 
-This project is created for educational and demonstration purposes. You are free to modify and extend it for your own use.
+No license file is currently included in this repository. Contact the project owner for reuse or distribution permissions.
 
 ---
 
