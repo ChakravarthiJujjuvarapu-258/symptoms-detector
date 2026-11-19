@@ -8,3 +8,6 @@
 - [x] Add polished, accessible animations throughout the redesigned experience.
 - [x] Finish manual area search controls for Nearby care (location correction follow-up).
 - [x] Apply the Kinetic Elegance design system consistently across every app page and shared state.
+
+- [ ] Complete final project checks: test health matching, review lint output, and verify page metadata and signed-in flows.
+- [ ] Review Google Maps authorization requirements and publish the finished app if the preview is ready.
