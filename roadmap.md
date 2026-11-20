@@ -11,3 +11,5 @@
 
 - [ ] Complete final project checks: test health matching, review lint output, and verify page metadata and signed-in flows.
 - [ ] Review Google Maps authorization requirements and publish the finished app if the preview is ready.
+- [x] Add subtle accessible animations to the sign-in page and verify reduced-motion behavior.
+- [ ] Clarify the requested repository branch destinations and sharing for the four named email addresses.

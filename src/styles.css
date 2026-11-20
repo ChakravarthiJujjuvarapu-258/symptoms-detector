@@ -751,6 +751,40 @@ h1, h2, .display-title, .section-title { letter-spacing: -0.01em; font-weight: 7
   color: color-mix(in oklab, var(--teal) 26%, transparent);
 }
 
+/* Quiet entrance and living pulse for the sign-in screen. */
+.kinetic-auth__intro {
+  animation: auth-intro-enter 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.kinetic-auth__mark {
+  animation: auth-mark-enter 720ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    auth-mark-pulse 4.8s ease-in-out 900ms infinite;
+}
+.kinetic-auth__card {
+  transform-origin: center top;
+  animation: auth-card-enter 700ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
+}
+@keyframes auth-intro-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes auth-mark-enter {
+  from { opacity: 0; transform: translateY(8px) scale(0.88); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes auth-mark-pulse {
+  0%, 78%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 0%, transparent); }
+  86% { box-shadow: 0 0 0 9px color-mix(in oklab, var(--gold) 12%, transparent); }
+}
+@keyframes auth-card-enter {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kinetic-auth__intro,
+  .kinetic-auth__mark,
+  .kinetic-auth__card { animation: none; }
+}
+
 @media (max-width: 640px) {
   .home-hero__chip--a { left: 0.5rem; }
   .home-hero__chip--b { right: 0.5rem; }

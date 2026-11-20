@@ -225,9 +225,9 @@ function AuthPage() {
 
 
   return (
-    <div className="kinetic-page mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4 py-10 sm:py-16">
-      <div className="mb-6 text-center">
-        <span className="kinetic-orbit mx-auto">
+    <div className="kinetic-page kinetic-auth mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4 py-10 sm:py-16">
+      <div className="kinetic-auth__intro mb-6 text-center">
+        <span className="kinetic-orbit kinetic-auth__mark mx-auto">
           <Activity className="size-6" aria-hidden="true" />
         </span>
         <p className="eyebrow mt-5">Secure clinical workspace</p>
@@ -237,7 +237,7 @@ function AuthPage() {
         </p>
       </div>
 
-      <Card className="kinetic-panel">
+      <Card className="kinetic-panel kinetic-auth__card">
         <CardHeader className="pb-3">
           <CardTitle className="text-base">Welcome</CardTitle>
           <CardDescription>Choose how you'd like to continue.</CardDescription>
