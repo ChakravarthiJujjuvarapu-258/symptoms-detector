@@ -12,4 +12,5 @@
 - [ ] Complete final project checks: test health matching, review lint output, and verify page metadata and signed-in flows.
 - [ ] Review Google Maps authorization requirements and publish the finished app if the preview is ready.
 - [x] Add subtle accessible animations to the sign-in page and verify reduced-motion behavior.
-- [ ] Clarify the requested repository branch destinations and sharing for the four named email addresses.
+- [x] Confirm the requested destination is one branch in this project's existing repository.
+- [ ] Create and push a dedicated shareable branch, then arrange repository access for the four named people; the repository branch and collaborator controls are unavailable in this chat.
